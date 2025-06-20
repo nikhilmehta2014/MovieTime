@@ -1,0 +1,79 @@
+# === IDE files ===
+.idea
+.idea/
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+*.iml
+*.iws
+*.ipr
+
+# === Gradle files ===
+.gradle/
+build/
+*/build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# === Local configuration files ===
+local.properties
+*.keystore
+*.jks
+
+# === Android Studio/IntelliJ logs and caches ===
+captures/
+/captures
+.externalNativeBuild/
+.cxx/
+.DS_Store
+*.log
+
+# === OS-specific files ===
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# === APKs / AABs / Binaries ===
+*.apk
+*.ap_
+*.aab
+
+# === Kotlin/Java/Compose specific ===
+*.class
+*.dex
+
+# === Dependency and wrapper files ===
+/.gradle/
+/build/
+/local.properties
+
+# === Jetpack Compose previews cache ===
+.compose-cache/
+
+# === Crashlytics / Firebase (if applicable) ===
+crashlytics-build.properties
+fabric.properties
+
+# === Miscellaneous ===
+*.orig
+*.rej
+*.swp
+*.swo
+
+# === Coverage / Reports ===
+*.ec
+coverage/
+jacoco.exec
+output.json
+
+# === Android Test related ===
+/test-output/
+
+# === Optional: Exclude generated navigation binding ===
+navigation.json
+
+# === Optional: MacOS ===
+*.DS_Store
+
