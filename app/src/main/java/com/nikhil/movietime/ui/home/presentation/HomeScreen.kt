@@ -1,4 +1,4 @@
-package com.nikhil.movietime.ui.home
+package com.nikhil.movietime.ui.home.presentation
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize

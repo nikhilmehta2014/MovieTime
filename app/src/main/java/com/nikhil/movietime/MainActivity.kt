@@ -15,8 +15,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.nikhil.movietime.ui.home.BottomNavigationBar
-import com.nikhil.movietime.ui.home.bottomNavItems
+import com.nikhil.movietime.ui.home.presentation.BottomNavigationBar
+import com.nikhil.movietime.ui.home.presentation.bottomNavItems
 import com.nikhil.movietime.ui.navigation.NavigationGraph
 import com.nikhil.movietime.ui.theme.MovieTimeTheme
 

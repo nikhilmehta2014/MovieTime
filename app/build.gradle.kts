@@ -1,3 +1,6 @@
+import java.util.Properties
+import java.io.FileInputStream
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -6,9 +9,24 @@ plugins {
     kotlin("kapt")
 }
 
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localProperties.load(FileInputStream(localPropertiesFile))
+}
+
+val tmdbApiKey = localProperties.getProperty("TMDB_API_KEY")
+    ?: throw GradleException("TMDB_API_KEY not found in local.properties")
+
+println("Loaded TMDB_API_KEY = $tmdbApiKey")
+
 android {
     namespace = "com.nikhil.movietime"
     compileSdk = 35
+
+    buildFeatures {
+        buildConfig = true
+    }
 
     defaultConfig {
         applicationId = "com.nikhil.movietime"
@@ -16,14 +34,8 @@ android {
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
-
+        buildConfigField("String", "TMDB_API_KEY", "\"$tmdbApiKey\"")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
-        buildConfigField(
-            "String",
-            "TMDB_API_KEY",
-            "\"${project.findProperty("TMDB_API_KEY") ?: ""}\""
-        )
     }
 
     buildTypes {
@@ -65,6 +77,7 @@ dependencies {
     implementation(libs.hilt.core)
     implementation(libs.androidx.hilt.navigation)
     implementation(libs.androidx.hilt.navigation.fragment)
+    implementation(libs.javapoet)
     kapt(libs.hilt.compiler)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

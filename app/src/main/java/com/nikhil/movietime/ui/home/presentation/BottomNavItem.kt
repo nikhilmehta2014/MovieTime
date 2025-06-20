@@ -1,4 +1,4 @@
-package com.nikhil.movietime.ui.home
+package com.nikhil.movietime.ui.home.presentation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite

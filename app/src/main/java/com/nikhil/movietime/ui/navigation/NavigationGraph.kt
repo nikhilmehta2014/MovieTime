@@ -5,7 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.nikhil.movietime.ui.favorite.FavoriteScreen
-import com.nikhil.movietime.ui.home.HomeScreen
+import com.nikhil.movietime.ui.home.presentation.HomeScreen
 import com.nikhil.movietime.ui.search.SearchScreen
 
 @Composable
