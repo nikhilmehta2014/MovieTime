@@ -1,0 +1,56 @@
+package com.nikhil.movietime.ui.components
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
+
+@Composable
+fun LabelCard(
+    text: String,
+    modifier: Modifier = Modifier,
+    cornerRadius: Dp = 16.dp,
+    backgroundColor: Color = Color.Black,
+    contentColor: Color = Color.White,
+    padding: PaddingValues = PaddingValues(horizontal = 12.dp, vertical = 6.dp)
+) {
+    Box(
+        modifier = modifier
+            .clip(RoundedCornerShape(cornerRadius))
+            .background(backgroundColor)
+            .padding(padding)
+    ) {
+        Text(
+            text = text,
+            color = contentColor
+        )
+    }
+}
+
+@Preview(
+    name = "LabelCard Preview",
+    showBackground = true,
+    backgroundColor = 0xFFEEEEEE,
+    widthDp = 200,
+    heightDp = 100
+)
+@Composable
+fun LabelCardPreview() {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.Center
+    ) {
+        LabelCard(text = "Now Playing")
+        Spacer(modifier = Modifier.height(8.dp))
+        LabelCard(text = "Trending", cornerRadius = 16.dp)
+    }
+}

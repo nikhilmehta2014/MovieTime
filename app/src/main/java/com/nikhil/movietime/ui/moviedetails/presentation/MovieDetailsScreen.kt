@@ -1,33 +1,58 @@
 package com.nikhil.movietime.ui.moviedetails.presentation
 
 import android.content.Intent
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.*
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.*
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.*
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.*
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import androidx.compose.animation.core.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Share
-import androidx.hilt.navigation.compose.hiltViewModel
-import coil3.compose.rememberAsyncImagePainter
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import coil3.compose.rememberAsyncImagePainter
+import com.nikhil.movietime.ui.components.LabelCard
 
 @Composable
 fun MovieDetailsScreen(
@@ -117,7 +142,13 @@ fun MovieDetailsScreen(
                             modifier = Modifier
                                 .height(screenHeight * 0.2f)
                                 .width(screenWidth * 0.25f)
-                                .clip(RoundedCornerShape(8.dp))
+                                .graphicsLayer {
+                                    shadowElevation = 16f
+                                    shape = RoundedCornerShape(12.dp)
+                                    clip = true
+                                    renderEffect = null
+                                }
+                                .background(Color.White, RoundedCornerShape(12.dp))
                         )
                     }
 
@@ -160,6 +191,27 @@ fun MovieDetailsScreen(
 
                 Spacer(modifier = Modifier.height(24.dp))
 
+                LazyRow(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp)
+                ) {
+                    state.movie?.let {
+                        val labelList = buildList {
+                            add(it.runtime)
+                            add(it.releaseYear)
+                            add(it.adult)
+                            addAll(it.genres)
+                        }
+                        items(labelList) { label ->
+                            LabelCard(text = label)
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(24.dp))
+
                 if (state.isLoading) {
                     repeat(4) {
                         Spacer(
@@ -181,55 +233,69 @@ fun MovieDetailsScreen(
             }
         }
 
-        Box(modifier = Modifier.fillMaxSize()) {
-            IconButton(
-                onClick = { navController.popBackStack() },
-                modifier = Modifier
-                    .align(Alignment.TopStart)
-                    .padding(start = 12.dp, top = 12.dp)
-            ) {
+        // Back, Share and Bookmark buttons
+        Box(
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .padding(start = 12.dp, top = 12.dp)
+                .size(40.dp)
+                .background(Color.Black.copy(alpha = 0.6f), shape = CircleShape),
+            contentAlignment = Alignment.Center
+        ) {
+            IconButton(onClick = { navController.popBackStack() }) {
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
                     contentDescription = "Back",
                     tint = Color.White
                 )
             }
+        }
 
-            Column(
-                modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .padding(end = 12.dp, top = 12.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                IconButton(onClick = {
-                    state.movie?.let { movie ->
-                        val shareIntent = Intent(Intent.ACTION_SEND).apply {
-                            type = "text/plain"
-                            putExtra(Intent.EXTRA_SUBJECT, movie.title)
-                            putExtra(
-                                Intent.EXTRA_TEXT,
-                                "Check out this movie: ${movie.title}\n\n${movie.overview}"
-                            )
-                        }
-                        context.startActivity(Intent.createChooser(shareIntent, "Share via"))
+        Box(
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(end = 12.dp, top = 12.dp)
+                .size(40.dp)
+                .background(Color.Black.copy(alpha = 0.6f), shape = CircleShape),
+            contentAlignment = Alignment.Center
+        ) {
+            IconButton(onClick = {
+                state.movie?.let { movie ->
+                    val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                        type = "text/plain"
+                        putExtra(Intent.EXTRA_SUBJECT, movie.title)
+                        putExtra(
+                            Intent.EXTRA_TEXT,
+                            "Check out this movie: ${movie.title}\n\n${movie.overview}"
+                        )
                     }
-                }) {
-                    Icon(
-                        imageVector = Icons.Default.Share,
-                        contentDescription = "Share",
-                        tint = Color.White
-                    )
+                    context.startActivity(Intent.createChooser(shareIntent, "Share via"))
                 }
+            }) {
+                Icon(
+                    imageVector = Icons.Default.Share,
+                    contentDescription = "Share",
+                    tint = Color.White
+                )
+            }
+        }
 
-                IconButton(onClick = {
-                    // TODO: Bookmark
-                }) {
-                    Icon(
-                        imageVector = Icons.Default.Favorite,
-                        contentDescription = "Bookmark",
-                        tint = Color.White
-                    )
-                }
+        Box(
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(end = 12.dp, top = 68.dp) // 12dp top + 40dp height + 16dp space
+                .size(40.dp)
+                .background(Color.Black.copy(alpha = 0.6f), shape = CircleShape),
+            contentAlignment = Alignment.Center
+        ) {
+            IconButton(onClick = {
+                // TODO: Bookmark
+            }) {
+                Icon(
+                    imageVector = Icons.Default.Favorite,
+                    contentDescription = "Bookmark",
+                    tint = Color.White
+                )
             }
         }
 

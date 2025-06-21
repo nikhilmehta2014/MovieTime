@@ -12,5 +12,19 @@ fun MovieDetailsDto.toDomain(): MovieDetails {
         status = status,
         posterUrl = "https://image.tmdb.org/t/p/w500$posterPath",
         backdropUrl = "https://image.tmdb.org/t/p/w500$backdropPath",
+        runtime = formatRuntime(runtime.toInt()),
+        releaseYear = extractYear(releaseDate),
+        adult = if (adult) "A" else "U",
+        genres = genres.map { it.name }
     )
+}
+
+private fun formatRuntime(runtimeInMinutes: Int): String {
+    val hours = runtimeInMinutes / 60
+    val minutes = runtimeInMinutes % 60
+    return "${hours} h ${minutes} m"
+}
+
+private fun extractYear(releaseDate: String?): String {
+    return releaseDate?.takeIf { it.length >= 4 }?.substring(0, 4).orEmpty()
 }

@@ -8,4 +8,8 @@ data class MovieDetails(
     val status: String,
     val posterUrl: String,
     val backdropUrl: String,
+    val runtime: String,
+    val releaseYear: String,
+    val adult: String,
+    val genres: List<String>,
 )

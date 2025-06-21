@@ -34,7 +34,7 @@ class MovieDetailsViewModel @Inject constructor(
                 val result = repository.getMovieDetails(movieId)
                 _state.value = _state.value.copy(
                     isLoading = false,
-                    movie = result
+                    movie = result,
                 )
             } catch (e: Exception) {
                 _state.value = _state.value.copy(
