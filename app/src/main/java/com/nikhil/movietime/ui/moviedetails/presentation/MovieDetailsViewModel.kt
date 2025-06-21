@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nikhil.movietime.ui.moviedetails.domain.repository.MovieDetailsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -16,8 +18,8 @@ class MovieDetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val _state = mutableStateOf(MovieDetailsState())
-    val state: State<MovieDetailsState> = _state
+    private val _state = MutableStateFlow(MovieDetailsState())
+    val state: StateFlow<MovieDetailsState> = _state
 
     init {
         savedStateHandle.get<Int>("movieId")?.let { movieId ->

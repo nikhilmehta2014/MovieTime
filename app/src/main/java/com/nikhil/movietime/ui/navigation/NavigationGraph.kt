@@ -29,7 +29,7 @@ fun NavigationGraph(navController: NavHostController) {
             arguments = listOf(navArgument("movieId") { type = NavType.IntType })
         ) { backStackEntry ->
             val movieId = backStackEntry.arguments?.getInt("movieId") ?: return@composable
-            MovieDetailsScreen(movieId = movieId)
+            MovieDetailsScreen(movieId = movieId, navController = navController)
         }
         composable("search") { SearchScreen() }
         composable("favorite") { FavoriteScreen() }
