@@ -79,6 +79,8 @@ dependencies {
     implementation(libs.androidx.hilt.navigation)
     implementation(libs.androidx.hilt.navigation.fragment)
     implementation(libs.javapoet)
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
     kapt(libs.hilt.compiler)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
