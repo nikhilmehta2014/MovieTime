@@ -1,16 +1,14 @@
 package com.nikhil.movietime.ui.search
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import com.nikhil.movietime.ui.search.presentation.SearchViewModel
 
 @Composable
-fun SearchScreen() {
-    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text("Search Screen", color = Color.White)
-    }
+fun SearchScreen(
+    navController: NavController,
+    viewModel: SearchViewModel = hiltViewModel()
+) {
+
 }

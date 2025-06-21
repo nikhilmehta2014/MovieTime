@@ -31,7 +31,9 @@ fun NavigationGraph(navController: NavHostController) {
             val movieId = backStackEntry.arguments?.getInt("movieId") ?: return@composable
             MovieDetailsScreen(movieId = movieId, navController = navController)
         }
-        composable("search") { SearchScreen() }
+        composable(route = Routes.SEARCH) {
+            SearchScreen(navController = navController)
+        }
         composable("favorite") { FavoriteScreen() }
     }
 }
