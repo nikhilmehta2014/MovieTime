@@ -1,5 +1,6 @@
 package com.nikhil.movietime.core.network
 
+import com.nikhil.movietime.ui.moviedetails.data.model.MovieDetailsDto
 import com.nikhil.movietime.ui.home.data.model.NowPlayingMoviesResponse
 import com.nikhil.movietime.ui.home.data.model.TrendingMoviesResponse
 import retrofit2.http.GET
@@ -13,4 +14,9 @@ interface ApiService {
 
     @GET("movie/now_playing")
     suspend fun getNowPlayingMovies(): NowPlayingMoviesResponse
+
+    @GET("movie/{movie_id}")
+    suspend fun getMovieDetails(
+        @Path("movie_id") movieId: Int,
+    ): MovieDetailsDto
 }
