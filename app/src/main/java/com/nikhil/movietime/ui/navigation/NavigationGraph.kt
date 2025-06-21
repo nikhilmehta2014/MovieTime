@@ -9,7 +9,7 @@ import androidx.navigation.navArgument
 import com.nikhil.movietime.ui.favorite.FavoriteScreen
 import com.nikhil.movietime.ui.home.presentation.HomeScreen
 import com.nikhil.movietime.ui.moviedetails.presentation.MovieDetailsScreen
-import com.nikhil.movietime.ui.search.SearchScreen
+import com.nikhil.movietime.ui.search.presentation.SearchScreen
 
 @Composable
 fun NavigationGraph(navController: NavHostController) {

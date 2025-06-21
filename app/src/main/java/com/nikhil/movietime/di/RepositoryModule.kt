@@ -5,6 +5,8 @@ import com.nikhil.movietime.ui.home.domain.repository.HomeRepository
 import com.nikhil.movietime.ui.home.data.repository.HomeRepositoryImpl
 import com.nikhil.movietime.ui.moviedetails.data.repository.MovieDetailsRepositoryImpl
 import com.nikhil.movietime.ui.moviedetails.domain.repository.MovieDetailsRepository
+import com.nikhil.movietime.ui.search.data.repository.SearchRepositoryImpl
+import com.nikhil.movietime.ui.search.domain.repository.SearchRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,5 +27,11 @@ object RepositoryModule {
     @Singleton
     fun provideMovieDetailsRepository(api: ApiService): MovieDetailsRepository {
         return MovieDetailsRepositoryImpl(api)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSearchRepository(api: ApiService): SearchRepository {
+        return SearchRepositoryImpl(api)
     }
 }
