@@ -18,7 +18,10 @@ import com.nikhil.movietime.ui.components.MovieTitle
 import com.nikhil.movietime.ui.home.domain.model.Movie
 
 @Composable
-fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
+fun HomeScreen(
+    viewModel: HomeViewModel = hiltViewModel(),
+    onMovieClick: (Int) -> Unit
+) {
     val state = viewModel.state
 
     Column(
@@ -46,7 +49,7 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                             title = trendingMovie.title,
                             posterUrl = trendingMovie.posterUrl
                         ),
-                        onClick = {}
+                        onClick = { onMovieClick(trendingMovie.id) }
                     )
                 }
             }
@@ -70,7 +73,7 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                             title = nowPlayingMovie.title,
                             posterUrl = nowPlayingMovie.posterUrl
                         ),
-                        onClick = {}
+                        onClick = { onMovieClick(nowPlayingMovie.id) }
                     )
                 }
             }
