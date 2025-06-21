@@ -6,6 +6,7 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.vector.ImageVector
+import com.nikhil.movietime.ui.navigation.Routes
 
 @Immutable
 data class BottomNavItem(
@@ -16,17 +17,17 @@ data class BottomNavItem(
 
 val bottomNavItems = listOf(
     BottomNavItem(
-        route = "home",
+        route = Routes.HOME,
         icon = Icons.Default.Home,
         label = "Home"
     ),
     BottomNavItem(
-        route = "search",
+        route = Routes.SEARCH,
         icon = Icons.Default.Search,
         label = "Search"
     ),
     BottomNavItem(
-        route = "favorite",
+        route = Routes.FAVORITE,
         icon = Icons.Default.Favorite,
         label = "Favorite"
     )
