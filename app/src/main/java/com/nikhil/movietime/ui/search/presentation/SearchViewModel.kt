@@ -1,7 +1,5 @@
 package com.nikhil.movietime.ui.search.presentation
 
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nikhil.movietime.core.data.repository.FavoriteRepository
@@ -10,6 +8,7 @@ import com.nikhil.movietime.ui.search.domain.repository.SearchRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -26,13 +25,19 @@ class SearchViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(SearchUiState())
     val uiState: StateFlow<SearchUiState> = _uiState
 
-    private val _isFavorite = mutableStateOf(false)
-    val isFavorite: State<Boolean> = _isFavorite
+    private val _favoriteMovieIds = MutableStateFlow<Set<Int>>(emptySet())
+    val favoriteMovieIds: StateFlow<Set<Int>> = _favoriteMovieIds.asStateFlow()
 
     private val queryFlow = MutableStateFlow("")
 
     init {
-        observeQuery()
+        observeQuery()  // TODO - Should this be inside viewModelScope?
+        viewModelScope.launch {
+            favoriteRepository.getFavoriteMovieIds()
+                .collect { ids ->
+                    _favoriteMovieIds.value = ids
+                }
+        }
     }
 
     fun onSearchQueryChanged(newQuery: String) {
@@ -79,13 +84,12 @@ class SearchViewModel @Inject constructor(
 
     fun toggleFavorite(movie: MovieDetails) {
         viewModelScope.launch {
-            val currentlyFavorite = isFavorite.value
-            if (currentlyFavorite) {
+            val currentFavorites = favoriteMovieIds.value
+            if (movie.id in currentFavorites) {
                 favoriteRepository.removeFavorite(movie)
             } else {
                 favoriteRepository.saveFavorite(movie)
             }
-            _isFavorite.value = !currentlyFavorite
         }
     }
 }

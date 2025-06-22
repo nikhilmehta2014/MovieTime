@@ -28,4 +28,9 @@ class FavoriteRepositoryImpl @Inject constructor(
     override suspend fun getFavoriteMovies(): Flow<List<MovieDetails>> {
         return dao.getAll().map { list -> list.map { it.toDomain() } }
     }
+
+    override fun getFavoriteMovieIds(): Flow<Set<Int>> {
+        return dao.getAll()
+            .map { list -> list.map { it.id }.toSet() }
+    }
 }

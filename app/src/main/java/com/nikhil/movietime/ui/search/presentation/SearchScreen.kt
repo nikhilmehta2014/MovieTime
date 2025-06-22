@@ -26,6 +26,7 @@ fun SearchScreen(
     viewModel: SearchViewModel = hiltViewModel()
 ) {
     val state by viewModel.uiState.collectAsState()
+    val favoriteMovieIds by viewModel.favoriteMovieIds.collectAsState()
 
     Column(
         modifier = Modifier
@@ -116,7 +117,7 @@ fun SearchScreen(
                                     onFavoriteClick = { movieDetails ->
                                         viewModel.toggleFavorite(movieDetails)
                                     },
-                                    isFavorite = viewModel.isFavorite.value,
+                                    isFavorite = favoriteMovieIds.contains(movie.id),
                                 )
                             }
                         }
