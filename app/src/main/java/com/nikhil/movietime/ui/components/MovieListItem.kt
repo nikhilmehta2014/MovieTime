@@ -1,5 +1,6 @@
 package com.nikhil.movietime.ui.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -16,11 +17,12 @@ import coil3.compose.AsyncImage
 import com.nikhil.movietime.ui.search.domain.model.SearchedMovie
 
 @Composable
-fun MovieListItem(movie: SearchedMovie) {
+fun MovieListItem(movie: SearchedMovie, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(120.dp),
+            .height(120.dp)
+            .clickable { onClick() },
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         colors = CardDefaults.cardColors(containerColor = Color(0xFFF5F5F5))

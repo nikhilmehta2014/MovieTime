@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.nikhil.movietime.ui.components.MovieListItem
+import com.nikhil.movietime.ui.navigation.Routes
 
 @Composable
 fun SearchScreen(
@@ -106,7 +107,9 @@ fun SearchScreen(
                             verticalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
                             items(state.movies) { movie ->
-                                MovieListItem(movie = movie)
+                                MovieListItem(movie = movie){
+                                    navController.navigate("${Routes.MOVIE_DETAILS}/${movie.id}")
+                                }
                             }
                         }
                     }
