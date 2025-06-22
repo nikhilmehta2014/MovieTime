@@ -33,7 +33,7 @@ fun HomeScreen(
 ) {
     val state = viewModel.state
 
-    if (!state.isConnected && !state.isLoading) {
+    if (!state.isConnected && !state.hasLocalData && !state.isLoading) {
         Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center

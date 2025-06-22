@@ -14,23 +14,23 @@ class FavoriteRepositoryImpl @Inject constructor(
 ) : FavoriteRepository {
 
     override suspend fun saveFavorite(movie: Movie) {
-        dao.insert(movie.toEntity())
+        dao.insertMovie(movie.toEntity())
     }
 
     override suspend fun removeFavorite(movie: Movie) {
-        dao.delete(movie.toEntity())
+        dao.deleteMovie(movie.toEntity())
     }
 
     override suspend fun isFavorite(movieId: Int): Boolean {
-        return dao.exists(movieId)
+        return dao.movieExists(movieId)
     }
 
     override suspend fun getFavoriteMovies(): Flow<List<Movie>> {
-        return dao.getAll().map { list -> list.map { it.toDomain() } }
+        return dao.getAllMovies().map { list -> list.map { it.toDomain() } }
     }
 
     override fun getFavoriteMovieIds(): Flow<Set<Int>> {
-        return dao.getAll()
+        return dao.getAllMovies()
             .map { list -> list.map { it.id }.toSet() }
     }
 }

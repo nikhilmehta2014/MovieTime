@@ -2,10 +2,10 @@ package com.nikhil.movietime.di
 
 import com.nikhil.movietime.core.data.local.MovieDao
 import com.nikhil.movietime.core.data.repository.FavoriteRepository
+import com.nikhil.movietime.core.data.repository.MovieRepositoryImpl
 import com.nikhil.movietime.core.domain.repository.FavoriteRepositoryImpl
+import com.nikhil.movietime.core.domain.repository.MovieRepository
 import com.nikhil.movietime.core.network.ApiService
-import com.nikhil.movietime.ui.home.domain.repository.HomeRepository
-import com.nikhil.movietime.ui.home.data.repository.HomeRepositoryImpl
 import com.nikhil.movietime.ui.moviedetails.data.repository.MovieDetailsRepositoryImpl
 import com.nikhil.movietime.ui.moviedetails.domain.repository.MovieDetailsRepository
 import com.nikhil.movietime.ui.search.data.repository.SearchRepositoryImpl
@@ -22,8 +22,8 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideMovieRepository(api: ApiService): HomeRepository {
-        return HomeRepositoryImpl(api)
+    fun provideMovieRepository(api: ApiService, dao: MovieDao): MovieRepository {
+        return MovieRepositoryImpl(api, dao)
     }
 
     @Provides

@@ -1,12 +1,12 @@
-package com.nikhil.movietime.ui.home.data.model
+package com.nikhil.movietime.core.data.model
 
 import com.google.gson.annotations.SerializedName
 
-data class TrendingMoviesResponse(
-    @SerializedName("results") val movies: List<TrendingMoviesDto>
+data class MoviesResponse(
+    @SerializedName("results") val movies: List<MovieDto>
 )
 
-data class TrendingMoviesDto(
+data class MovieDto(
     @SerializedName("id") val id: Int,
     @SerializedName("title") val title: String,
     @SerializedName("poster_path") val posterPath: String?,
