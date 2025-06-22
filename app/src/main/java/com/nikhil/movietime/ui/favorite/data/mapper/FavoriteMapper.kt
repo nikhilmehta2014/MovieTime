@@ -1,9 +1,9 @@
 package com.nikhil.movietime.ui.favorite.data.mapper
 
-import com.nikhil.movietime.core.data.local.entities.MovieEntity
+import com.nikhil.movietime.core.data.local.entities.FavoriteMovieEntity
 import com.nikhil.movietime.core.domain.model.Movie
 
-fun MovieEntity.toDomain(): Movie {
+fun FavoriteMovieEntity.toDomain(): Movie {
     return Movie(
         id = id,
         title = title,

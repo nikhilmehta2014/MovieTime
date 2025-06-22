@@ -1,6 +1,6 @@
 package com.nikhil.movietime.ui.moviedetails.data.mappers
 
-import com.nikhil.movietime.core.data.local.entities.MovieEntity
+import com.nikhil.movietime.core.data.local.entities.FavoriteMovieEntity
 import com.nikhil.movietime.ui.moviedetails.data.model.MovieDetailsDto
 import com.nikhil.movietime.core.domain.model.Movie
 
@@ -21,8 +21,8 @@ fun MovieDetailsDto.toDomain(): Movie {
     )
 }
 
-fun Movie.toEntity(): MovieEntity {
-    return MovieEntity(
+fun Movie.toEntity(): FavoriteMovieEntity {
+    return FavoriteMovieEntity(
         id = id,
         title = title,
         overview = overview,
