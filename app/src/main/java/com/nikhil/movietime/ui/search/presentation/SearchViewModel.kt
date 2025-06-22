@@ -3,7 +3,7 @@ package com.nikhil.movietime.ui.search.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nikhil.movietime.core.data.repository.FavoriteRepository
-import com.nikhil.movietime.core.domain.model.MovieDetails
+import com.nikhil.movietime.core.domain.model.Movie
 import com.nikhil.movietime.ui.search.domain.repository.SearchRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,13 +31,8 @@ class SearchViewModel @Inject constructor(
     private val queryFlow = MutableStateFlow("")
 
     init {
-        observeQuery()  // TODO - Should this be inside viewModelScope?
-        viewModelScope.launch {
-            favoriteRepository.getFavoriteMovieIds()
-                .collect { ids ->
-                    _favoriteMovieIds.value = ids
-                }
-        }
+        observeQuery()
+        getFavoriteMovieIds()
     }
 
     fun onSearchQueryChanged(newQuery: String) {
@@ -82,7 +77,16 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-    fun toggleFavorite(movie: MovieDetails) {
+    private fun getFavoriteMovieIds() {
+        viewModelScope.launch {
+            favoriteRepository.getFavoriteMovieIds()
+                .collect { ids ->
+                    _favoriteMovieIds.value = ids
+                }
+        }
+    }
+
+    fun toggleFavorite(movie: Movie) {
         viewModelScope.launch {
             val currentFavorites = favoriteMovieIds.value
             if (movie.id in currentFavorites) {

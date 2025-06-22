@@ -24,7 +24,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil3.compose.rememberAsyncImagePainter
-import com.nikhil.movietime.ui.home.domain.model.Movie
+import com.nikhil.movietime.core.domain.model.Movie
 
 @Composable
 fun MovieCard(

@@ -2,10 +2,10 @@ package com.nikhil.movietime.ui.moviedetails.data.mappers
 
 import com.nikhil.movietime.core.data.local.entities.MovieEntity
 import com.nikhil.movietime.ui.moviedetails.data.model.MovieDetailsDto
-import com.nikhil.movietime.core.domain.model.MovieDetails
+import com.nikhil.movietime.core.domain.model.Movie
 
-fun MovieDetailsDto.toDomain(): MovieDetails {
-    return MovieDetails(
+fun MovieDetailsDto.toDomain(): Movie {
+    return Movie(
         id = id,
         title = title,
         tagline = tagline,
@@ -21,7 +21,7 @@ fun MovieDetailsDto.toDomain(): MovieDetails {
     )
 }
 
-fun MovieDetails.toEntity(): MovieEntity {
+fun Movie.toEntity(): MovieEntity {
     return MovieEntity(
         id = id,
         title = title,

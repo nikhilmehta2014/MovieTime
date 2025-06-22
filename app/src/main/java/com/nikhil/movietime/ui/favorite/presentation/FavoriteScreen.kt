@@ -56,9 +56,7 @@ fun FavoriteScreen(
                         movie = movie,
                         onClick = { onMovieClick(movie.id) },
                         onFavoriteClick = { movieDetails ->
-                            viewModel.removeFavoriteFromDatabase(movieDetails) {
-                                viewModel.removeFromUi(movieDetails)
-                            }
+                            viewModel.removeFavoriteFromDatabase(movieDetails)
                         },
                         isFavorite = true
                     )

@@ -13,9 +13,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.nikhil.movietime.core.domain.model.Movie
 import com.nikhil.movietime.ui.components.MovieCard
 import com.nikhil.movietime.ui.components.MovieTitle
-import com.nikhil.movietime.ui.home.domain.model.Movie
 
 @Composable
 fun HomeScreen(

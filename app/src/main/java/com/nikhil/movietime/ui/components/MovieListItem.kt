@@ -33,13 +33,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import com.nikhil.movietime.core.domain.model.MovieDetails
+import com.nikhil.movietime.core.domain.model.Movie
 
 @Composable
 fun MovieListItem(
-    movie: MovieDetails,
+    movie: Movie,
     onClick: () -> Unit,
-    onFavoriteClick: (MovieDetails) -> Unit,
+    onFavoriteClick: (Movie) -> Unit,
     isFavorite: Boolean
 ) {
     Box(
