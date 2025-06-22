@@ -16,6 +16,9 @@ interface MovieDao {
     @Query("SELECT * FROM movies")
     fun getAll(): Flow<List<MovieEntity>>
 
+    @Query("SELECT EXISTS(SELECT 1 FROM movies WHERE id = :movieId)")
+    suspend fun exists(movieId: Int): Boolean
+
     @Delete
     suspend fun delete(movie: MovieEntity)
 }

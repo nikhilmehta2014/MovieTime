@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.nikhil.movietime.ui.moviedetails.domain.model.MovieDetails
 import com.nikhil.movietime.ui.moviedetails.domain.repository.MovieDetailsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,9 +22,31 @@ class MovieDetailsViewModel @Inject constructor(
     private val _state = MutableStateFlow(MovieDetailsState())
     val state: StateFlow<MovieDetailsState> = _state
 
+    // TODO - See if it can be merged with "MovieDetailsState"
+    private val _isFavorite = mutableStateOf(false)
+    val isFavorite: State<Boolean> = _isFavorite
+
     init {
         savedStateHandle.get<Int>("movieId")?.let { movieId ->
             fetchMovieDetails(movieId)
+        }
+    }
+
+    fun checkFavoriteStatus(movieId: Int) {
+        viewModelScope.launch {
+            _isFavorite.value = repository.isFavorite(movieId)
+        }
+    }
+
+    fun toggleFavorite(movie: MovieDetails) {
+        viewModelScope.launch {
+            val currentlyFavorite = isFavorite.value
+            if (currentlyFavorite) {
+                repository.removeFavorite(movie)
+            } else {
+                repository.saveFavorite(movie)
+            }
+            _isFavorite.value = !currentlyFavorite
         }
     }
 

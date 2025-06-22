@@ -1,5 +1,6 @@
 package com.nikhil.movietime.ui.moviedetails.data.mappers
 
+import com.nikhil.movietime.core.data.local.entities.MovieEntity
 import com.nikhil.movietime.ui.moviedetails.data.model.MovieDetailsDto
 import com.nikhil.movietime.ui.moviedetails.domain.model.MovieDetails
 
@@ -16,6 +17,19 @@ fun MovieDetailsDto.toDomain(): MovieDetails {
         releaseYear = extractYear(releaseDate),
         adult = if (adult) "A" else "U",
         genres = genres.map { it.name }
+    )
+}
+
+fun MovieDetails.toEntity(): MovieEntity {
+    return MovieEntity(
+        id = id,
+        title = title,
+        overview = overview,
+        posterUrl = posterUrl,
+        backdropUrl = backdropUrl,
+        releaseYear = releaseYear,
+        adult = adult,
+        genres = genres
     )
 }
 
