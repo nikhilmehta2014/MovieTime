@@ -17,6 +17,7 @@ hiltNavigation = "1.2.0"
 javapoet = "1.13.0"
 ksp = "2.1.21-2.0.1"
 coil = "3.2.0"
+room = "2.7.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -45,6 +46,9 @@ androidx-hilt-navigation-fragment = { group = "androidx.hilt", name = "hilt-navi
 javapoet = { group = "com.squareup", name = "javapoet", version.ref = "javapoet" }
 coil-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil" }
 coil-network-okhttp = { group = "io.coil-kt.coil3", name = "coil-network-okhttp", version.ref = "coil" }
+room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
