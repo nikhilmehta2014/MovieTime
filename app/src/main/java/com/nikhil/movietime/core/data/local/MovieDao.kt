@@ -7,6 +7,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.nikhil.movietime.core.data.local.entities.FavoriteMovieEntity
 import com.nikhil.movietime.core.data.local.entities.HomeMovieEntity
+import com.nikhil.movietime.core.data.local.entities.MovieDetailsEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -34,4 +35,10 @@ interface MovieDao {
 
     @Query("DELETE FROM movies_home WHERE isTrending = 1 OR isNowPlaying = 1")
     suspend fun clearHomeMovies()
+
+    @Query("SELECT * FROM movie_details WHERE id = :movieId LIMIT 1")
+    fun getMovieDetails(movieId: Int): Flow<MovieDetailsEntity>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertDetails(movie: MovieDetailsEntity)
 }

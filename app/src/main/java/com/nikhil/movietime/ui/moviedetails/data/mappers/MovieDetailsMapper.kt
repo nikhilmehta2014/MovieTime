@@ -1,6 +1,7 @@
 package com.nikhil.movietime.ui.moviedetails.data.mappers
 
 import com.nikhil.movietime.core.data.local.entities.FavoriteMovieEntity
+import com.nikhil.movietime.core.data.local.entities.MovieDetailsEntity
 import com.nikhil.movietime.ui.moviedetails.data.model.MovieDetailsDto
 import com.nikhil.movietime.core.domain.model.Movie
 
@@ -28,6 +29,34 @@ fun Movie.toEntity(): FavoriteMovieEntity {
         overview = overview,
         posterUrl = posterUrl,
         backdropUrl = backdropUrl,
+        releaseYear = releaseYear,
+        adult = adult,
+        genres = genres
+    )
+}
+
+fun MovieDetailsDto.toEntity(): MovieDetailsEntity {
+    return MovieDetailsEntity(
+        id = id,
+        title = title,
+        overview = overview,
+        posterUrl = "https://image.tmdb.org/t/p/w500$posterPath",
+        backdropUrl = "https://image.tmdb.org/t/p/w500$backdropPath",
+        runtime = formatRuntime(runtime.toInt()),
+        releaseYear = extractYear(releaseDate),
+        adult = if (adult) "A" else "U",
+        genres = genres.map { it.name }
+    )
+}
+
+fun MovieDetailsEntity.toDomain(): Movie {
+    return Movie(
+        id = id,
+        title = title,
+        overview = overview,
+        posterUrl = posterUrl,
+        backdropUrl = backdropUrl,
+        runtime = runtime,
         releaseYear = releaseYear,
         adult = adult,
         genres = genres

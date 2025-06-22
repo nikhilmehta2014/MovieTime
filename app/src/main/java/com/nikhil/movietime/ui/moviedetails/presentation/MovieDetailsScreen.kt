@@ -1,6 +1,7 @@
 package com.nikhil.movietime.ui.moviedetails.presentation
 
 import android.content.Intent
+import android.util.Log
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
@@ -48,12 +49,14 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil3.compose.rememberAsyncImagePainter
+import com.nikhil.movietime.R
 import com.nikhil.movietime.ui.components.LabelCard
 
 @Composable
@@ -96,6 +99,22 @@ fun MovieDetailsScreen(
         start = Offset(shimmerTranslate.value, shimmerTranslate.value),
         end = Offset(shimmerTranslate.value + 200f, shimmerTranslate.value + 200f)
     )
+
+    // TODO - This is being called continuously, check it
+    Log.d("asdf", "MovieDetailsScreen, state.hasLocalData=${state.hasLocalData}")
+    if (!state.isConnected && !state.hasLocalData && !state.isLoading) {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Image(
+                    painter = painterResource(id = R.drawable.cloud_off),
+                    contentDescription = "No Internet",
+                    modifier = Modifier.size(200.dp)
+                )
+                Text("No Internet Connection", style = MaterialTheme.typography.bodyLarge, color = Color.White)
+            }
+        }
+        return
+    }
 
     Box(modifier = Modifier.fillMaxSize()) {
         Box(
@@ -306,7 +325,6 @@ fun MovieDetailsScreen(
             }
         }
 
-        // Error
         state.error?.let {
             Box(
                 modifier = Modifier.fillMaxSize(),

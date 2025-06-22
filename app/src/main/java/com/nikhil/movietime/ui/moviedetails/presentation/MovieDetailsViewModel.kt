@@ -1,5 +1,6 @@
 package com.nikhil.movietime.ui.moviedetails.presentation
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
@@ -7,10 +8,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nikhil.movietime.core.data.repository.FavoriteRepository
 import com.nikhil.movietime.core.domain.model.Movie
+import com.nikhil.movietime.core.network.NetworkMonitor
 import com.nikhil.movietime.ui.moviedetails.domain.repository.MovieDetailsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -18,8 +22,11 @@ import javax.inject.Inject
 class MovieDetailsViewModel @Inject constructor(
     private val repository: MovieDetailsRepository,
     private val favoriteRepository: FavoriteRepository,
+    networkMonitor: NetworkMonitor,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
+
+    private val movieId: Int = checkNotNull(savedStateHandle["movieId"])
 
     private val _state = MutableStateFlow(MovieDetailsState())
     val state: StateFlow<MovieDetailsState> = _state
@@ -28,8 +35,41 @@ class MovieDetailsViewModel @Inject constructor(
     val isFavorite: State<Boolean> = _isFavorite
 
     init {
-        savedStateHandle.get<Int>("movieId")?.let { movieId ->
-            fetchMovieDetails(movieId)
+        checkFavoriteStatus(movieId)
+
+        viewModelScope.launch {
+            networkMonitor.isConnected.collect { isOnline ->
+                _state.update { it.copy(isConnected = isOnline) }
+                if (isOnline) {
+                    repository.refreshMovieDetails(movieId) // Remote → Room
+                }
+                    observeLocalMovieDetails()
+            }
+        }
+    }
+
+    private fun observeLocalMovieDetails() {
+        viewModelScope.launch {
+            repository.getMovieDetails(movieId)
+                .catch { e ->
+                    _state.update {
+                        it.copy(
+                            isLoading = false,
+                            error = e.localizedMessage ?: "Something went wrong"
+                        )
+                    }
+                }
+                .collect { details ->
+                    val hasLocalData = details != null  // TODO - check this code - "details != null"
+                    Log.d("asdf", "VM hasLocalData = $hasLocalData")
+                    _state.update {
+                        it.copy(
+                            movie = details,
+                            hasLocalData = hasLocalData,
+                            isLoading = false
+                        )
+                    }
+                }
         }
     }
 
@@ -48,24 +88,6 @@ class MovieDetailsViewModel @Inject constructor(
                 favoriteRepository.saveFavorite(movie)
             }
             _isFavorite.value = !currentlyFavorite
-        }
-    }
-
-    private fun fetchMovieDetails(movieId: Int) {
-        viewModelScope.launch {
-            try {
-                _state.value = _state.value.copy(isLoading = true)
-                val result = repository.getMovieDetails(movieId)
-                _state.value = _state.value.copy(
-                    isLoading = false,
-                    movie = result,
-                )
-            } catch (e: Exception) {
-                _state.value = _state.value.copy(
-                    isLoading = false,
-                    error = "Failed to load movie details"
-                )
-            }
         }
     }
 }
