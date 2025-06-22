@@ -108,9 +108,16 @@ fun SearchScreen(
                             verticalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
                             items(state.movies) { movie ->
-                                MovieListItem(movie = movie.toMovie()){
-                                    navController.navigate("${Routes.MOVIE_DETAILS}/${movie.id}")
-                                }
+                                MovieListItem(
+                                    movie = movie.toMovie(),
+                                    onClick = {
+                                        navController.navigate("${Routes.MOVIE_DETAILS}/${movie.id}")
+                                    },
+                                    onFavoriteClick = { movieDetails ->
+                                        viewModel.toggleFavorite(movieDetails)
+                                    },
+                                    isFavorite = viewModel.isFavorite.value,
+                                )
                             }
                         }
                     }

@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.nikhil.movietime.core.data.repository.FavoriteRepository
 import com.nikhil.movietime.core.domain.model.MovieDetails
 import com.nikhil.movietime.ui.moviedetails.domain.repository.MovieDetailsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,6 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MovieDetailsViewModel @Inject constructor(
     private val repository: MovieDetailsRepository,
+    private val favoriteRepository: FavoriteRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -34,7 +36,7 @@ class MovieDetailsViewModel @Inject constructor(
 
     fun checkFavoriteStatus(movieId: Int) {
         viewModelScope.launch {
-            _isFavorite.value = repository.isFavorite(movieId)
+            _isFavorite.value = favoriteRepository.isFavorite(movieId)
         }
     }
 
@@ -42,9 +44,9 @@ class MovieDetailsViewModel @Inject constructor(
         viewModelScope.launch {
             val currentlyFavorite = isFavorite.value
             if (currentlyFavorite) {
-                repository.removeFavorite(movie)
+                favoriteRepository.removeFavorite(movie)
             } else {
-                repository.saveFavorite(movie)
+                favoriteRepository.saveFavorite(movie)
             }
             _isFavorite.value = !currentlyFavorite
         }

@@ -1,8 +1,11 @@
 package com.nikhil.movietime.ui.search.presentation
 
-import androidx.lifecycle.SavedStateHandle
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.nikhil.movietime.core.data.repository.FavoriteRepository
+import com.nikhil.movietime.core.domain.model.MovieDetails
 import com.nikhil.movietime.ui.search.domain.repository.SearchRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,11 +19,15 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
+    private val favoriteRepository: FavoriteRepository,
     private val repository: SearchRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(SearchUiState())
     val uiState: StateFlow<SearchUiState> = _uiState
+
+    private val _isFavorite = mutableStateOf(false)
+    val isFavorite: State<Boolean> = _isFavorite
 
     private val queryFlow = MutableStateFlow("")
 
@@ -67,6 +74,18 @@ class SearchViewModel @Inject constructor(
                         }
                     }
                 }
+        }
+    }
+
+    fun toggleFavorite(movie: MovieDetails) {
+        viewModelScope.launch {
+            val currentlyFavorite = isFavorite.value
+            if (currentlyFavorite) {
+                favoriteRepository.removeFavorite(movie)
+            } else {
+                favoriteRepository.saveFavorite(movie)
+            }
+            _isFavorite.value = !currentlyFavorite
         }
     }
 }

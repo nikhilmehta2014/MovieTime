@@ -15,10 +15,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -34,7 +36,12 @@ import coil3.compose.AsyncImage
 import com.nikhil.movietime.core.domain.model.MovieDetails
 
 @Composable
-fun MovieListItem(movie: MovieDetails, onClick: () -> Unit) {
+fun MovieListItem(
+    movie: MovieDetails,
+    onClick: () -> Unit,
+    onFavoriteClick: (MovieDetails) -> Unit,
+    isFavorite: Boolean
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -52,7 +59,6 @@ fun MovieListItem(movie: MovieDetails, onClick: () -> Unit) {
                 modifier = Modifier.padding(12.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // Movie poster
                 AsyncImage(
                     model = "https://image.tmdb.org/t/p/w185${movie.posterUrl}",
                     contentDescription = movie.title,
@@ -76,7 +82,8 @@ fun MovieListItem(movie: MovieDetails, onClick: () -> Unit) {
                         style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.padding(top = 8.dp)
+                        modifier = Modifier
+                            .padding(top = 8.dp, end = 48.dp)
                     )
 
                     Spacer(modifier = Modifier.height(6.dp))
@@ -115,13 +122,17 @@ fun MovieListItem(movie: MovieDetails, onClick: () -> Unit) {
             }
         }
 
-        Icon(
-            imageVector = Icons.Default.FavoriteBorder,
-            contentDescription = "Favorite",
-            tint = Color.Red,
+        IconButton(
+            onClick = { onFavoriteClick(movie) },
             modifier = Modifier
                 .align(Alignment.TopEnd)
                 .padding(8.dp)
-        )
+        ) {
+            Icon(
+                imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                contentDescription = if (isFavorite) "Unfavorite" else "Favorite",
+                tint = if (isFavorite) Color.Red else Color.Gray
+            )
+        }
     }
 }

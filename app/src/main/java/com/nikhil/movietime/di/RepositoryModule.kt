@@ -1,9 +1,9 @@
 package com.nikhil.movietime.di
 
 import com.nikhil.movietime.core.data.local.MovieDao
+import com.nikhil.movietime.core.data.repository.FavoriteRepository
+import com.nikhil.movietime.core.domain.repository.FavoriteRepositoryImpl
 import com.nikhil.movietime.core.network.ApiService
-import com.nikhil.movietime.ui.favorite.data.repository.FavoriteMoviesRepositoryImpl
-import com.nikhil.movietime.ui.favorite.domain.repository.FavoriteMoviesRepository
 import com.nikhil.movietime.ui.home.domain.repository.HomeRepository
 import com.nikhil.movietime.ui.home.data.repository.HomeRepositoryImpl
 import com.nikhil.movietime.ui.moviedetails.data.repository.MovieDetailsRepositoryImpl
@@ -40,7 +40,7 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideFavoriteMoviesRepositoryRepository(dao: MovieDao): FavoriteMoviesRepository {
-        return FavoriteMoviesRepositoryImpl(dao)
+    fun provideFavoriteRepository(dao: MovieDao): FavoriteRepository {
+        return FavoriteRepositoryImpl(dao)
     }
 }
