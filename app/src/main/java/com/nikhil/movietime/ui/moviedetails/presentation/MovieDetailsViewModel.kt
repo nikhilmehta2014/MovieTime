@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.nikhil.movietime.ui.moviedetails.domain.model.MovieDetails
+import com.nikhil.movietime.core.domain.model.MovieDetails
 import com.nikhil.movietime.ui.moviedetails.domain.repository.MovieDetailsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

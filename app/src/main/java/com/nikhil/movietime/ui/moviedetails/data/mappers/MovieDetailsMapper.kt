@@ -2,7 +2,7 @@ package com.nikhil.movietime.ui.moviedetails.data.mappers
 
 import com.nikhil.movietime.core.data.local.entities.MovieEntity
 import com.nikhil.movietime.ui.moviedetails.data.model.MovieDetailsDto
-import com.nikhil.movietime.ui.moviedetails.domain.model.MovieDetails
+import com.nikhil.movietime.core.domain.model.MovieDetails
 
 fun MovieDetailsDto.toDomain(): MovieDetails {
     return MovieDetails(

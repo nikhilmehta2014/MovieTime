@@ -1,5 +1,6 @@
-package com.nikhil.movietime.ui.moviedetails.domain.model
+package com.nikhil.movietime.core.domain.model
 
+// TODO - Rename it to "Movie" and "Movie" to "HomeMovie" or some other apt name
 data class MovieDetails(
     val id: Int,
     val title: String,

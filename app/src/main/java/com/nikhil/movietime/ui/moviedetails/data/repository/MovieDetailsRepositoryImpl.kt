@@ -5,7 +5,7 @@ import com.nikhil.movietime.core.network.ApiService
 import com.nikhil.movietime.ui.moviedetails.data.mappers.toDomain
 import com.nikhil.movietime.ui.moviedetails.data.mappers.toEntity
 import com.nikhil.movietime.ui.moviedetails.data.model.MovieDetailsDto
-import com.nikhil.movietime.ui.moviedetails.domain.model.MovieDetails
+import com.nikhil.movietime.core.domain.model.MovieDetails
 import com.nikhil.movietime.ui.moviedetails.domain.repository.MovieDetailsRepository
 import javax.inject.Inject
 
