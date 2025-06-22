@@ -6,7 +6,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.nikhil.movietime.ui.favorite.FavoriteScreen
+import com.nikhil.movietime.ui.favorite.presentation.FavoriteScreen
 import com.nikhil.movietime.ui.home.presentation.HomeScreen
 import com.nikhil.movietime.ui.moviedetails.presentation.MovieDetailsScreen
 import com.nikhil.movietime.ui.search.presentation.SearchScreen
@@ -34,6 +34,12 @@ fun NavigationGraph(navController: NavHostController) {
         composable(route = Routes.SEARCH) {
             SearchScreen(navController = navController)
         }
-        composable("favorite") { FavoriteScreen() }
+        composable("favorite") {
+            FavoriteScreen(
+                onMovieClick = { movieId ->
+                    navController.navigate("${Routes.MOVIE_DETAILS}/${movieId}")
+                }
+            )
+        }
     }
 }

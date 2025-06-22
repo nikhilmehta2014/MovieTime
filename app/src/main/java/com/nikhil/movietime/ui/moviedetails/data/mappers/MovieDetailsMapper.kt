@@ -16,6 +16,7 @@ fun MovieDetailsDto.toDomain(): MovieDetails {
         runtime = formatRuntime(runtime.toInt()),
         releaseYear = extractYear(releaseDate),
         adult = if (adult) "A" else "U",
+        rating = 0F,
         genres = genres.map { it.name }
     )
 }

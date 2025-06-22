@@ -12,5 +12,6 @@ data class MovieDetails(
     val runtime: String,
     val releaseYear: String,
     val adult: String,
+    val rating: Float,
     val genres: List<String>,
 )

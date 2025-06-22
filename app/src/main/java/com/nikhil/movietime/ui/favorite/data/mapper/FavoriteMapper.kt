@@ -15,6 +15,7 @@ fun MovieEntity.toDomain(): MovieDetails {
         runtime = "",
         releaseYear = releaseYear,
         adult = adult,
+        rating = 0F,
         genres = genres
     )
 }
