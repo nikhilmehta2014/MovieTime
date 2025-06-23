@@ -7,15 +7,7 @@ fun FavoriteMovieEntity.toDomain(): Movie {
     return Movie(
         id = id,
         title = title,
-        tagline = "",
-        overview = overview,
-        status = "",
-        posterUrl = posterUrl,
-        backdropUrl = backdropUrl,
-        runtime = "",
-        releaseYear = releaseYear,
-        adult = adult,
-        rating = 0F,
-        genres = genres
+        posterUrl = posterUrl.orEmpty(),
+        releaseYear = releaseYear.orEmpty(),
     )
 }

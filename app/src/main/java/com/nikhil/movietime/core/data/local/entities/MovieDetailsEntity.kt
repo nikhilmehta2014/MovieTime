@@ -7,14 +7,15 @@ import androidx.room.PrimaryKey
 data class MovieDetailsEntity(
     @PrimaryKey val id: Int,
     val title: String,
-    val overview: String = "",
-    val posterUrl: String,
-    val backdropUrl: String = "",
-    val runtime: String = "",
-    val releaseYear: String = "",
-    val adult: String = "",
+    val tagline: String?,
+    val overview: String?,
+    val posterUrl: String?,
+    val backdropUrl: String?,
+    val runtime: String?,
+    val releaseYear: String?,
+    val adult: String?,
     val genres: List<String> = emptyList(),
-    val isTrending: Boolean = false,
-    val isNowPlaying: Boolean = false,
+    val isTrending: Boolean = false,    // TODO - This may make sense, think about it
+    val isNowPlaying: Boolean = false,    // TODO - This may make sense, think about it
     val lastUpdated: Long = 0L
 )

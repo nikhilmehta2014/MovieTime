@@ -102,7 +102,7 @@ fun MovieDetailsScreen(
     Box(modifier = Modifier.fillMaxSize()) {
         // TODO - This is being called continuously, check it
         // Show offline screen if no internet + no local data
-        Log.d("asdf", "MovieDetailsScreen, state.hasLocalData=${state.hasLocalData}")
+//        Log.d("asdf", "MovieDetailsScreen, state.hasLocalData=${state.hasLocalData}")
         if (!state.isConnected && !state.hasLocalData && !state.isLoading) {
             NoNetworkScreen()
         } else {
@@ -214,8 +214,8 @@ fun MovieDetailsScreen(
                     ) {
                         state.movie?.let {
                             val labelList = buildList {
-                                add(it.runtime)
-                                add(it.releaseYear)
+                                it.runtime.takeIf { it.isNotEmpty() }?.let { add(it) }
+                                it.releaseYear.takeIf { it.isNotEmpty() }?.let { add(it) }
                                 add(it.adult)
                                 addAll(it.genres)
                             }

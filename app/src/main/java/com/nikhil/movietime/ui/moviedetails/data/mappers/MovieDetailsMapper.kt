@@ -26,12 +26,8 @@ fun Movie.toEntity(): FavoriteMovieEntity {
     return FavoriteMovieEntity(
         id = id,
         title = title,
-        overview = overview,
         posterUrl = posterUrl,
-        backdropUrl = backdropUrl,
         releaseYear = releaseYear,
-        adult = adult,
-        genres = genres
     )
 }
 
@@ -39,9 +35,10 @@ fun MovieDetailsDto.toEntity(): MovieDetailsEntity {
     return MovieDetailsEntity(
         id = id,
         title = title,
+        tagline = tagline,
         overview = overview,
-        posterUrl = "https://image.tmdb.org/t/p/w500$posterPath",
-        backdropUrl = "https://image.tmdb.org/t/p/w500$backdropPath",
+        posterUrl = posterPath,
+        backdropUrl = backdropPath,
         runtime = formatRuntime(runtime.toInt()),
         releaseYear = extractYear(releaseDate),
         adult = if (adult) "A" else "U",
@@ -53,20 +50,25 @@ fun MovieDetailsEntity.toDomain(): Movie {
     return Movie(
         id = id,
         title = title,
-        overview = overview,
-        posterUrl = posterUrl,
-        backdropUrl = backdropUrl,
-        runtime = runtime,
-        releaseYear = releaseYear,
-        adult = adult,
+        tagline = tagline.orEmpty(),
+        overview = overview.orEmpty(),
+        posterUrl = posterUrl.orEmpty(),
+        backdropUrl = backdropUrl.orEmpty(),
+        runtime = runtime.orEmpty(),
+        releaseYear = releaseYear.orEmpty(),
+        adult = adult.orEmpty(),
         genres = genres
     )
 }
 
 private fun formatRuntime(runtimeInMinutes: Int): String {
-    val hours = runtimeInMinutes / 60
-    val minutes = runtimeInMinutes % 60
-    return "${hours} h ${minutes} m"
+    return if (runtimeInMinutes == 0) {
+        ""
+    } else {
+        val hours = runtimeInMinutes / 60
+        val minutes = runtimeInMinutes % 60
+        "${hours} h ${minutes} m"
+    }
 }
 
 private fun extractYear(releaseDate: String?): String {
