@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nikhil.movietime.core.data.repository.FavoriteRepository
 import com.nikhil.movietime.core.domain.model.Movie
+import com.nikhil.movietime.core.network.NetworkMonitor
 import com.nikhil.movietime.ui.search.domain.repository.SearchRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,7 +20,8 @@ import javax.inject.Inject
 @HiltViewModel
 class SearchViewModel @Inject constructor(
     private val favoriteRepository: FavoriteRepository,
-    private val repository: SearchRepository
+    private val repository: SearchRepository,
+    networkMonitor: NetworkMonitor,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(SearchUiState())
@@ -31,6 +33,11 @@ class SearchViewModel @Inject constructor(
     private val queryFlow = MutableStateFlow("")
 
     init {
+        viewModelScope.launch {
+            networkMonitor.isConnected.collect { isOnline ->
+                _uiState.update { it.copy(isConnected = isOnline) }
+            }
+        }
         observeQuery()
         getFavoriteMovieIds()
     }

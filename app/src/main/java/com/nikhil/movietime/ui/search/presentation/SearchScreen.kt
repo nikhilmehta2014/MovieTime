@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.nikhil.movietime.ui.components.MovieListItem
+import com.nikhil.movietime.ui.components.NoNetworkScreen
 import com.nikhil.movietime.ui.navigation.Routes
 import com.nikhil.movietime.ui.search.data.mapper.toMovie
 
@@ -28,108 +29,112 @@ fun SearchScreen(
     val state by viewModel.uiState.collectAsState()
     val favoriteMovieIds by viewModel.favoriteMovieIds.collectAsState()
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
-    ) {
-        // Search Bar Container
-        Card(
+    if (!state.isConnected) {
+        NoNetworkScreen()
+    } else {
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-                .height(56.dp),
-            shape = RoundedCornerShape(12.dp),
-            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.White)
+                .fillMaxSize()
+                .background(Color.White)
         ) {
-            Row(
+            // Search Bar Container
+            Card(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 16.dp),
-                verticalAlignment = Alignment.CenterVertically
+                    .fillMaxWidth()
+                    .padding(16.dp)
+                    .height(56.dp),
+                shape = RoundedCornerShape(12.dp),
+                elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.White)
             ) {
-                Icon(
-                    imageVector = Icons.Default.Search,
-                    contentDescription = "Search",
-                    tint = Color.Gray
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                TextField(
-                    value = state.query,
-                    onValueChange = { viewModel.onSearchQueryChanged(it) },
-                    placeholder = { Text("Find movies", color = Color.Gray) },
-                    colors = TextFieldDefaults.colors(
-                        focusedContainerColor = Color.Transparent,
-                        unfocusedContainerColor = Color.Transparent,
-                        disabledContainerColor = Color.Transparent,
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
-                        cursorColor = Color.Gray,
-                        focusedTextColor = Color.Black,
-                        unfocusedTextColor = Color.Black
-                    ),
+                Row(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .background(Color.Transparent)
-                )
-                if (state.errorMessage != null) {
-                    Text(
-                        text = state.errorMessage ?: "",
-                        color = Color.Red,
-                        style = MaterialTheme.typography.bodySmall,
-                        modifier = Modifier.padding(start = 24.dp, top = 4.dp)
+                        .fillMaxSize()
+                        .padding(horizontal = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Search,
+                        contentDescription = "Search",
+                        tint = Color.Gray
                     )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    TextField(
+                        value = state.query,
+                        onValueChange = { viewModel.onSearchQueryChanged(it) },
+                        placeholder = { Text("Find movies", color = Color.Gray) },
+                        colors = TextFieldDefaults.colors(
+                            focusedContainerColor = Color.Transparent,
+                            unfocusedContainerColor = Color.Transparent,
+                            disabledContainerColor = Color.Transparent,
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
+                            cursorColor = Color.Gray,
+                            focusedTextColor = Color.Black,
+                            unfocusedTextColor = Color.Black
+                        ),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(Color.Transparent)
+                    )
+                    if (state.errorMessage != null) {
+                        Text(
+                            text = state.errorMessage ?: "",
+                            color = Color.Red,
+                            style = MaterialTheme.typography.bodySmall,
+                            modifier = Modifier.padding(start = 24.dp, top = 4.dp)
+                        )
+                    }
                 }
             }
-        }
 
-        // Title
-        if (!state.isLoading && state.movies.isNotEmpty()) {
-            Text(
-                text = "Movies",
-                style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
-                modifier = Modifier
-                    .padding(horizontal = 16.dp, vertical = 8.dp)
-            )
-        }
-
-
-        // Movies List
-        Box(modifier = Modifier.fillMaxSize()) {
-            if (state.isLoading) {
-                CircularProgressIndicator(
-                    modifier = Modifier.align(Alignment.Center)
+            // Title
+            if (!state.isLoading && state.movies.isNotEmpty()) {
+                Text(
+                    text = "Movies",
+                    style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp, vertical = 8.dp)
                 )
-            } else {
-                when {
-                    state.movies.isNotEmpty() -> {
-                        LazyColumn(
-                            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-                            verticalArrangement = Arrangement.spacedBy(12.dp)
-                        ) {
-                            items(state.movies) { movie ->
-                                MovieListItem(
-                                    movie = movie.toMovie(),
-                                    onClick = {
-                                        navController.navigate("${Routes.MOVIE_DETAILS}/${movie.id}")
-                                    },
-                                    onFavoriteClick = { movieDetails ->
-                                        viewModel.toggleFavorite(movieDetails)
-                                    },
-                                    isFavorite = favoriteMovieIds.contains(movie.id),
-                                )
+            }
+
+
+            // Movies List
+            Box(modifier = Modifier.fillMaxSize()) {
+                if (state.isLoading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                } else {
+                    when {
+                        state.movies.isNotEmpty() -> {
+                            LazyColumn(
+                                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+                                verticalArrangement = Arrangement.spacedBy(12.dp)
+                            ) {
+                                items(state.movies) { movie ->
+                                    MovieListItem(
+                                        movie = movie.toMovie(),
+                                        onClick = {
+                                            navController.navigate("${Routes.MOVIE_DETAILS}/${movie.id}")
+                                        },
+                                        onFavoriteClick = { movieDetails ->
+                                            viewModel.toggleFavorite(movieDetails)
+                                        },
+                                        isFavorite = favoriteMovieIds.contains(movie.id),
+                                    )
+                                }
                             }
                         }
-                    }
 
-                    state.query.length >= 3 -> {
-                        // Show "No results found" only when search is valid but result is empty
-                        Text(
-                            text = "No results found",
-                            modifier = Modifier.align(Alignment.Center),
-                            style = MaterialTheme.typography.bodyLarge.copy(color = Color.Gray)
-                        )
+                        state.query.length >= 3 -> {
+                            // Show "No results found" only when search is valid but result is empty
+                            Text(
+                                text = "No results found",
+                                modifier = Modifier.align(Alignment.Center),
+                                style = MaterialTheme.typography.bodyLarge.copy(color = Color.Gray)
+                            )
+                        }
                     }
                 }
             }

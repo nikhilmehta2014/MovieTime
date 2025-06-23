@@ -6,5 +6,6 @@ data class SearchUiState(
     val query: String = "",
     val isLoading: Boolean = false,
     val movies: List<SearchedMovie> = emptyList(),
-    val errorMessage: String? = null
+    val errorMessage: String? = null,
+    val isConnected: Boolean = true,
 )
