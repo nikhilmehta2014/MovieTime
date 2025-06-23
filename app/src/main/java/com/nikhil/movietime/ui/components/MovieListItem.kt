@@ -29,10 +29,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
+import com.nikhil.movietime.R
 import com.nikhil.movietime.core.domain.model.Movie
 
 @Composable
@@ -60,9 +63,12 @@ fun MovieListItem(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 AsyncImage(
-                    model = "https://image.tmdb.org/t/p/w185${movie.posterUrl}",
+                    model = movie.posterUrl.takeIf { it.isNotEmpty() }
+                        ?.let { "https://image.tmdb.org/t/p/w185${movie.posterUrl}" },
                     contentDescription = movie.title,
                     contentScale = ContentScale.Crop,
+                    error = painterResource(R.drawable.error_poster),
+                    fallback = painterResource(R.drawable.fallback_poster),
                     modifier = Modifier
                         .fillMaxHeight()
                         .aspectRatio(2f / 3f)

@@ -1,7 +1,6 @@
 package com.nikhil.movietime.ui.moviedetails.presentation
 
 import android.content.Intent
-import android.util.Log
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
@@ -49,12 +48,15 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import coil3.compose.AsyncImage
 import coil3.compose.rememberAsyncImagePainter
+import com.nikhil.movietime.R
 import com.nikhil.movietime.ui.components.LabelCard
 import com.nikhil.movietime.ui.components.NoNetworkScreen
 
@@ -125,10 +127,13 @@ fun MovieDetailsScreen(
                                 .background(shimmerBrush)
                         )
                     } else {
-                        Image(
-                            painter = rememberAsyncImagePainter("https://image.tmdb.org/t/p/w780${state.movie?.backdropUrl}"),
+                        AsyncImage(
+                            model = state.movie?.backdropUrl?.takeIf { it.isNotEmpty() }
+                                ?.let { "https://image.tmdb.org/t/p/w780$it" },
                             contentDescription = null,
                             contentScale = ContentScale.Crop,
+                            error = painterResource(R.drawable.error_banner),
+                            fallback = painterResource(R.drawable.fallback_banner),
                             modifier = Modifier.matchParentSize()
                         )
                     }
@@ -150,10 +155,13 @@ fun MovieDetailsScreen(
                                     .background(shimmerBrush)
                             )
                         } else {
-                            Image(
-                                painter = rememberAsyncImagePainter("https://image.tmdb.org/t/p/w342${state.movie?.posterUrl}"),
+                            AsyncImage(
+                                model = state.movie?.posterUrl?.takeIf { it.isNotEmpty() }
+                                    ?.let { "https://image.tmdb.org/t/p/w342$it" },
                                 contentDescription = null,
                                 contentScale = ContentScale.Crop,
+                                error = painterResource(R.drawable.error_poster),
+                                fallback = painterResource(R.drawable.fallback_poster),
                                 modifier = Modifier
                                     .height(screenHeight * 0.2f)
                                     .width(screenWidth * 0.25f)
