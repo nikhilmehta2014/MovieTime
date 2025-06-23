@@ -100,161 +100,165 @@ fun MovieDetailsScreen(
         end = Offset(shimmerTranslate.value + 200f, shimmerTranslate.value + 200f)
     )
 
-    // TODO - This is being called continuously, check it
-    Log.d("asdf", "MovieDetailsScreen, state.hasLocalData=${state.hasLocalData}")
-    if (!state.isConnected && !state.hasLocalData && !state.isLoading) {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Image(
-                    painter = painterResource(id = R.drawable.cloud_off),
-                    contentDescription = "No Internet",
-                    modifier = Modifier.size(200.dp)
-                )
-                Text("No Internet Connection", style = MaterialTheme.typography.bodyLarge, color = Color.White)
-            }
-        }
-        return
-    }
-
     Box(modifier = Modifier.fillMaxSize()) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color(0xFF8D6E63))
-                .verticalScroll(rememberScrollState())
-        ) {
-            // Top Backdrop
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(screenHeight * 0.3f)
-            ) {
-                if (state.isLoading) {
-                    Spacer(
-                        modifier = Modifier
-                            .matchParentSize()
-                            .background(shimmerBrush)
-                    )
-                } else {
+        // TODO - This is being called continuously, check it
+        // Show offline screen if no internet + no local data
+        Log.d("asdf", "MovieDetailsScreen, state.hasLocalData=${state.hasLocalData}")
+        if (!state.isConnected && !state.hasLocalData && !state.isLoading) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Image(
-                        painter = rememberAsyncImagePainter("https://image.tmdb.org/t/p/w780${state.movie?.backdropUrl}"),
-                        contentDescription = null,
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier.matchParentSize()
+                        painter = painterResource(id = R.drawable.cloud_off),
+                        contentDescription = "No Internet",
+                        modifier = Modifier.size(200.dp)
+                    )
+                    Text(
+                        "No Internet Connection",
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = Color.White
                     )
                 }
             }
-
-            Column(
+        } else {
+            Box(
                 modifier = Modifier
-                    .padding(top = screenHeight * 0.25f)
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
+                    .fillMaxSize()
+                    .background(Color(0xFF8D6E63))
+                    .verticalScroll(rememberScrollState())
             ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
+                // Top Backdrop
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(screenHeight * 0.3f)
+                ) {
                     if (state.isLoading) {
                         Spacer(
                             modifier = Modifier
-                                .height(screenHeight * 0.2f)
-                                .width(screenWidth * 0.25f)
-                                .clip(RoundedCornerShape(8.dp))
+                                .matchParentSize()
                                 .background(shimmerBrush)
                         )
                     } else {
                         Image(
-                            painter = rememberAsyncImagePainter("https://image.tmdb.org/t/p/w342${state.movie?.posterUrl}"),
+                            painter = rememberAsyncImagePainter("https://image.tmdb.org/t/p/w780${state.movie?.backdropUrl}"),
                             contentDescription = null,
                             contentScale = ContentScale.Crop,
-                            modifier = Modifier
-                                .height(screenHeight * 0.2f)
-                                .width(screenWidth * 0.25f)
-                                .graphicsLayer {
-                                    shadowElevation = 16f
-                                    shape = RoundedCornerShape(12.dp)
-                                    clip = true
-                                    renderEffect = null
-                                }
-                                .background(Color.White, RoundedCornerShape(12.dp))
+                            modifier = Modifier.matchParentSize()
                         )
                     }
+                }
 
-                    Spacer(modifier = Modifier.width(16.dp))
-
-                    Column(modifier = Modifier.fillMaxWidth()) {
+                Column(
+                    modifier = Modifier
+                        .padding(top = screenHeight * 0.25f)
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
                         if (state.isLoading) {
                             Spacer(
                                 modifier = Modifier
-                                    .height(24.dp)
-                                    .fillMaxWidth(0.6f)
+                                    .height(screenHeight * 0.2f)
+                                    .width(screenWidth * 0.25f)
+                                    .clip(RoundedCornerShape(8.dp))
+                                    .background(shimmerBrush)
+                            )
+                        } else {
+                            Image(
+                                painter = rememberAsyncImagePainter("https://image.tmdb.org/t/p/w342${state.movie?.posterUrl}"),
+                                contentDescription = null,
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier
+                                    .height(screenHeight * 0.2f)
+                                    .width(screenWidth * 0.25f)
+                                    .graphicsLayer {
+                                        shadowElevation = 16f
+                                        shape = RoundedCornerShape(12.dp)
+                                        clip = true
+                                        renderEffect = null
+                                    }
+                                    .background(Color.White, RoundedCornerShape(12.dp))
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.width(16.dp))
+
+                        Column(modifier = Modifier.fillMaxWidth()) {
+                            if (state.isLoading) {
+                                Spacer(
+                                    modifier = Modifier
+                                        .height(24.dp)
+                                        .fillMaxWidth(0.6f)
+                                        .clip(RoundedCornerShape(4.dp))
+                                        .background(shimmerBrush)
+                                )
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Spacer(
+                                    modifier = Modifier
+                                        .height(18.dp)
+                                        .fillMaxWidth(0.4f)
+                                        .clip(RoundedCornerShape(4.dp))
+                                        .background(shimmerBrush)
+                                )
+                            } else {
+                                Text(
+                                    text = state.movie?.title.orEmpty(),
+                                    style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+                                    color = Color.White
+                                )
+                                state.movie?.tagline?.takeIf { it.isNotEmpty() }?.let {
+                                    Text(
+                                        text = it,
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        color = Color.White,
+                                        fontStyle = FontStyle.Italic
+                                    )
+                                }
+                            }
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(24.dp))
+
+                    LazyRow(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 8.dp)
+                    ) {
+                        state.movie?.let {
+                            val labelList = buildList {
+                                add(it.runtime)
+                                add(it.releaseYear)
+                                add(it.adult)
+                                addAll(it.genres)
+                            }
+                            items(labelList) { label ->
+                                LabelCard(text = label)
+                            }
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(24.dp))
+
+                    if (state.isLoading) {
+                        repeat(4) {
+                            Spacer(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(16.dp)
                                     .clip(RoundedCornerShape(4.dp))
                                     .background(shimmerBrush)
                             )
                             Spacer(modifier = Modifier.height(8.dp))
-                            Spacer(
-                                modifier = Modifier
-                                    .height(18.dp)
-                                    .fillMaxWidth(0.4f)
-                                    .clip(RoundedCornerShape(4.dp))
-                                    .background(shimmerBrush)
-                            )
-                        } else {
-                            Text(
-                                text = state.movie?.title.orEmpty(),
-                                style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
-                                color = Color.White
-                            )
-                            state.movie?.tagline?.takeIf { it.isNotEmpty() }?.let {
-                                Text(
-                                    text = it,
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    color = Color.White,
-                                    fontStyle = FontStyle.Italic
-                                )
-                            }
                         }
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(24.dp))
-
-                LazyRow(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp)
-                ) {
-                    state.movie?.let {
-                        val labelList = buildList {
-                            add(it.runtime)
-                            add(it.releaseYear)
-                            add(it.adult)
-                            addAll(it.genres)
-                        }
-                        items(labelList) { label ->
-                            LabelCard(text = label)
-                        }
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(24.dp))
-
-                if (state.isLoading) {
-                    repeat(4) {
-                        Spacer(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(16.dp)
-                                .clip(RoundedCornerShape(4.dp))
-                                .background(shimmerBrush)
+                    } else {
+                        Text(
+                            text = state.movie?.overview.orEmpty(),
+                            color = Color.White,
+                            style = MaterialTheme.typography.titleMedium
                         )
-                        Spacer(modifier = Modifier.height(8.dp))
                     }
-                } else {
-                    Text(
-                        text = state.movie?.overview.orEmpty(),
-                        color = Color.White,
-                        style = MaterialTheme.typography.titleMedium
-                    )
                 }
             }
         }
@@ -277,60 +281,64 @@ fun MovieDetailsScreen(
             }
         }
 
-        Box(
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .padding(end = 12.dp, top = 12.dp)
-                .size(40.dp)
-                .background(Color.Black.copy(alpha = 0.6f), shape = CircleShape),
-            contentAlignment = Alignment.Center
-        ) {
-            IconButton(onClick = {
-                state.movie?.let { movie ->
-                    val shareIntent = Intent(Intent.ACTION_SEND).apply {
-                        type = "text/plain"
-                        putExtra(Intent.EXTRA_SUBJECT, movie.title)
-                        putExtra(
-                            Intent.EXTRA_TEXT,
-                            "Check out this movie: ${movie.title}\n\n${movie.overview}"
-                        )
-                    }
-                    context.startActivity(Intent.createChooser(shareIntent, "Share via"))
-                }
-            }) {
-                Icon(
-                    imageVector = Icons.Default.Share,
-                    contentDescription = "Share",
-                    tint = Color.White
-                )
-            }
-        }
-
-        Box(
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .padding(end = 12.dp, top = 68.dp) // 12dp top + 40dp height + 16dp space
-                .size(40.dp)
-                .background(Color.Black.copy(alpha = 0.6f), shape = CircleShape),
-            contentAlignment = Alignment.Center
-        ) {
-            IconButton(onClick = {
-                state.movie?.let { viewModel.toggleFavorite(it) }
-            }) {
-                Icon(
-                    imageVector = if (viewModel.isFavorite.value) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                    contentDescription = "Bookmark",
-                    tint = Color.White
-                )
-            }
-        }
-
-        state.error?.let {
+        if (state.movie != null) {
             Box(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(end = 12.dp, top = 12.dp)
+                    .size(40.dp)
+                    .background(Color.Black.copy(alpha = 0.6f), shape = CircleShape),
                 contentAlignment = Alignment.Center
             ) {
-                Text(text = it, color = Color.Red)
+                IconButton(onClick = {
+                    state.movie.let { movie ->
+                        val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                            type = "text/plain"
+                            putExtra(Intent.EXTRA_SUBJECT, movie.title)
+                            putExtra(
+                                Intent.EXTRA_TEXT,
+                                "Check out this movie: ${movie.title}\n\n${movie.overview}"
+                            )
+                        }
+                        context.startActivity(Intent.createChooser(shareIntent, "Share via"))
+                    }
+                }) {
+                    Icon(
+                        imageVector = Icons.Default.Share,
+                        contentDescription = "Share",
+                        tint = Color.White
+                    )
+                }
+            }
+
+            Box(
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(end = 12.dp, top = 68.dp) // 12dp top + 40dp height + 16dp space
+                    .size(40.dp)
+                    .background(Color.Black.copy(alpha = 0.6f), shape = CircleShape),
+                contentAlignment = Alignment.Center
+            ) {
+                IconButton(onClick = {
+                    state.movie.let { viewModel.toggleFavorite(it) }
+                }) {
+                    Icon(
+                        imageVector = if (viewModel.isFavorite.value) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                        contentDescription = "Bookmark",
+                        tint = Color.White
+                    )
+                }
+            }
+        }
+
+        if (state.movie != null) {
+            state.error?.let {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(text = it, color = Color.Red)
+                }
             }
         }
     }
