@@ -49,15 +49,14 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil3.compose.rememberAsyncImagePainter
-import com.nikhil.movietime.R
 import com.nikhil.movietime.ui.components.LabelCard
+import com.nikhil.movietime.ui.components.NoNetworkScreen
 
 @Composable
 fun MovieDetailsScreen(
@@ -105,20 +104,7 @@ fun MovieDetailsScreen(
         // Show offline screen if no internet + no local data
         Log.d("asdf", "MovieDetailsScreen, state.hasLocalData=${state.hasLocalData}")
         if (!state.isConnected && !state.hasLocalData && !state.isLoading) {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Image(
-                        painter = painterResource(id = R.drawable.cloud_off),
-                        contentDescription = "No Internet",
-                        modifier = Modifier.size(200.dp)
-                    )
-                    Text(
-                        "No Internet Connection",
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = Color.White
-                    )
-                }
-            }
+            NoNetworkScreen()
         } else {
             Box(
                 modifier = Modifier
