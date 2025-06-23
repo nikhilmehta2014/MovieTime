@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.nikhil.movietime.core.domain.model.Movie
 import com.nikhil.movietime.core.domain.repository.MovieRepository
 import com.nikhil.movietime.core.network.NetworkMonitor
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -38,6 +39,7 @@ class HomeViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
+            state = state.copy(isLoading = true)
             combine(
                 movieRepository.getTrendingMovies(),
                 movieRepository.getNowPlayingMovies()
@@ -52,13 +54,15 @@ class HomeViewModel @Inject constructor(
                 )
             }.collect { (trending, nowPlaying) ->
                 val hasLocal = trending.isNotEmpty() || nowPlaying.isNotEmpty()
-                state = state.copy(
-                    trending = trending,
-                    nowPlaying = nowPlaying,
-                    isLoading = false,
-                    errorMessage = null,
-                    hasLocalData = hasLocal
-                )
+                if (hasLocal){
+                    state = state.copy(
+                        trending = trending,
+                        nowPlaying = nowPlaying,
+                        isLoading = false,
+                        errorMessage = null,
+                        hasLocalData = hasLocal
+                    )
+                }
             }
         }
     }
