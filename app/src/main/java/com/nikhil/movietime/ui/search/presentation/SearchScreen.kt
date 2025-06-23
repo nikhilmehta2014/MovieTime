@@ -1,5 +1,6 @@
 package com.nikhil.movietime.ui.search.presentation
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -12,12 +13,14 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.nikhil.movietime.R
 import com.nikhil.movietime.ui.components.MovieListItem
-import com.nikhil.movietime.ui.components.NoNetworkScreen
+import com.nikhil.movietime.ui.components.ErrorCard
 import com.nikhil.movietime.ui.navigation.Routes
 import com.nikhil.movietime.ui.search.data.mapper.toMovie
 
@@ -30,7 +33,11 @@ fun SearchScreen(
     val favoriteMovieIds by viewModel.favoriteMovieIds.collectAsState()
 
     if (!state.isConnected) {
-        NoNetworkScreen()
+        ErrorCard(
+            imageId = R.drawable.cloud_off,
+            imageContentDescription = "No Internet",
+            text = "No Internet Connection"
+        )
     } else {
         Column(
             modifier = Modifier
@@ -129,10 +136,11 @@ fun SearchScreen(
 
                         state.query.length >= 3 -> {
                             // Show "No results found" only when search is valid but result is empty
-                            Text(
-                                text = "No results found",
-                                modifier = Modifier.align(Alignment.Center),
-                                style = MaterialTheme.typography.bodyLarge.copy(color = Color.Gray)
+                            ErrorCard(
+                                imageId = R.drawable.no_movie_found,
+                                imageContentDescription = "No movie found",
+                                text = "No Movie Found",
+                                textColor = Color.Black
                             )
                         }
                     }

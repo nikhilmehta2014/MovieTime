@@ -1,5 +1,6 @@
 package com.nikhil.movietime.ui.components
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,21 +14,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.nikhil.movietime.R
 
 @Composable
-fun NoNetworkScreen() {
+fun ErrorCard(
+    @DrawableRes imageId: Int,
+    imageContentDescription: String,
+    text: String,
+    textColor: Color = Color.White
+) {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Image(
-                painter = painterResource(id = R.drawable.cloud_off),
-                contentDescription = "No Internet",
+                painter = painterResource(id = imageId),
+                contentDescription = imageContentDescription,
                 modifier = Modifier.size(200.dp)
             )
             Text(
-                "No Internet Connection",
+                text = text,
                 style = MaterialTheme.typography.bodyLarge,
-                color = Color.White
+                color = textColor
             )
         }
     }

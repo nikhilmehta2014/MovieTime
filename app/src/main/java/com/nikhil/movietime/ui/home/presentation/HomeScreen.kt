@@ -13,10 +13,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.nikhil.movietime.R
 import com.nikhil.movietime.core.domain.model.Movie
 import com.nikhil.movietime.ui.components.MovieCard
 import com.nikhil.movietime.ui.components.MovieTitle
-import com.nikhil.movietime.ui.components.NoNetworkScreen
+import com.nikhil.movietime.ui.components.ErrorCard
 
 @Composable
 fun HomeScreen(
@@ -26,7 +27,11 @@ fun HomeScreen(
     val state = viewModel.state
 
     if (!state.isConnected && !state.hasLocalData && !state.isLoading) {
-        NoNetworkScreen()
+        ErrorCard(
+            imageId = R.drawable.cloud_off,
+            imageContentDescription = "No Internet",
+            text = "No Internet Connection"
+        )
         return
     }
 

@@ -7,7 +7,6 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -55,10 +54,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil3.compose.AsyncImage
-import coil3.compose.rememberAsyncImagePainter
 import com.nikhil.movietime.R
 import com.nikhil.movietime.ui.components.LabelCard
-import com.nikhil.movietime.ui.components.NoNetworkScreen
+import com.nikhil.movietime.ui.components.ErrorCard
 
 @Composable
 fun MovieDetailsScreen(
@@ -106,7 +104,11 @@ fun MovieDetailsScreen(
         // Show offline screen if no internet + no local data
 //        Log.d("asdf", "MovieDetailsScreen, state.hasLocalData=${state.hasLocalData}")
         if (!state.isConnected && !state.hasLocalData && !state.isLoading) {
-            NoNetworkScreen()
+            ErrorCard(
+                imageId = R.drawable.cloud_off,
+                imageContentDescription = "No Internet",
+                text = "No Internet Connection"
+            )
         } else {
             Box(
                 modifier = Modifier
