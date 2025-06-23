@@ -19,6 +19,6 @@ fun HomeMovieEntity.toDomain(): Movie {
     return Movie(
         id = id,
         title = title,
-        posterUrl = posterUrl.orEmpty()
+        posterUrl = posterUrl.orEmpty(),
     )
 }

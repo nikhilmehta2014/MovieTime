@@ -28,6 +28,7 @@ fun Movie.toEntity(): FavoriteMovieEntity {
         title = title,
         posterUrl = posterUrl,
         releaseYear = releaseYear,
+        rating = rating
     )
 }
 
@@ -39,6 +40,7 @@ fun MovieDetailsDto.toEntity(): MovieDetailsEntity {
         overview = overview,
         posterUrl = posterPath,
         backdropUrl = backdropPath,
+        rating = voteAverage.roundTo1Decimal(),
         runtime = formatRuntime(runtime.toInt()),
         releaseYear = extractYear(releaseDate),
         adult = if (adult) "A" else "U",
@@ -57,6 +59,7 @@ fun MovieDetailsEntity.toDomain(): Movie {
         runtime = runtime.orEmpty(),
         releaseYear = releaseYear.orEmpty(),
         adult = adult.orEmpty(),
+        rating = rating ?: 0F,
         genres = genres
     )
 }
@@ -73,4 +76,11 @@ private fun formatRuntime(runtimeInMinutes: Int): String {
 
 private fun extractYear(releaseDate: String?): String {
     return releaseDate?.takeIf { it.length >= 4 }?.substring(0, 4).orEmpty()
+}
+
+fun Float.roundTo1Decimal(): Float {
+    return (this * 10).toInt().let { whole ->
+        val nextDigit = ((this * 100).toInt() % 10)
+        if (nextDigit > 5) (whole + 1) / 10f else whole / 10f
+    }
 }

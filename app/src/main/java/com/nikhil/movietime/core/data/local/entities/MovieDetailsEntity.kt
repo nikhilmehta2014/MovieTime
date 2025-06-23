@@ -11,6 +11,7 @@ data class MovieDetailsEntity(
     val overview: String?,
     val posterUrl: String?,
     val backdropUrl: String?,
+    val rating: Float?,
     val runtime: String?,
     val releaseYear: String?,
     val adult: String?,

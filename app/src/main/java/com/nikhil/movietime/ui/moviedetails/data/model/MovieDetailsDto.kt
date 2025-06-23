@@ -12,6 +12,7 @@ data class MovieDetailsDto(
     @SerializedName("status") val status: String,
     @SerializedName("runtime") val runtime: String,
     @SerializedName("release_date") val releaseDate: String,
+    @SerializedName("vote_average") val voteAverage: Float,
     @SerializedName("adult") val adult: Boolean,
     @SerializedName("genres") val genres: List<Genres>,
 )

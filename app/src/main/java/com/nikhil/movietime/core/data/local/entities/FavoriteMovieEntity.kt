@@ -9,4 +9,5 @@ data class FavoriteMovieEntity(
     val title: String,
     val posterUrl: String?,
     val releaseYear: String?,
+    val rating: Float?
 )

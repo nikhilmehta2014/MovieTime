@@ -9,5 +9,6 @@ fun FavoriteMovieEntity.toDomain(): Movie {
         title = title,
         posterUrl = posterUrl.orEmpty(),
         releaseYear = releaseYear.orEmpty(),
+        rating = rating ?: 0F
     )
 }
