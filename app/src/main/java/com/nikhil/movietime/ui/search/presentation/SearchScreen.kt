@@ -128,7 +128,6 @@ fun SearchScreen(
                                 imageId = R.drawable.no_movie_found,
                                 imageContentDescription = "No movie found",
                                 text = "No Movie Found",
-                                textColor = Color.Black
                             )
                         }
                     }
