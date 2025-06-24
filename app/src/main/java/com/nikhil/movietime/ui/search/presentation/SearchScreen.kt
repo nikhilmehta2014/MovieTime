@@ -29,6 +29,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -63,57 +64,15 @@ fun SearchScreen(
                 .fillMaxSize()
                 .background(Color(0xFF121212))
         ) {
-            // Search Bar Container
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
-                    .height(56.dp),
-                shape = RoundedCornerShape(12.dp),
-                elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White)
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(horizontal = 16.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Search,
-                        contentDescription = "Search",
-                        tint = Color.Gray
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    TextField(
-                        value = state.query,
-                        onValueChange = { viewModel.onSearchQueryChanged(it) },
-                        placeholder = { Text("Find movies", color = Color.Gray) },
-                        colors = TextFieldDefaults.colors(
-                            focusedContainerColor = Color.Transparent,
-                            unfocusedContainerColor = Color.Transparent,
-                            disabledContainerColor = Color.Transparent,
-                            focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent,
-                            cursorColor = Color.Gray,
-                            focusedTextColor = Color.Black,
-                            unfocusedTextColor = Color.Black
-                        ),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(Color.Transparent)
-                    )
-                    if (state.errorMessage != null) {
-                        Text(
-                            text = state.errorMessage ?: "",
-                            color = Color.Red,
-                            style = MaterialTheme.typography.bodySmall,
-                            modifier = Modifier.padding(start = 24.dp, top = 4.dp)
-                        )
-                    }
-                }
+            SearchBarContainer(state, viewModel)
+            if (state.errorMessage != null) {
+                Text(
+                    text = state.errorMessage ?: "",
+                    color = Color.Red,
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier.padding(start = 24.dp, top = 4.dp)
+                )
             }
-
             // Title
             if (state.isLoading) {
                 Spacer(
@@ -136,11 +95,7 @@ fun SearchScreen(
                     ) {
                         items(6) {
                             MovieListItem(
-                                movie = Movie(
-                                    id = 0,
-                                    title = "",
-                                    posterUrl = ""
-                                ),
+                                movie = Movie(id = 0, title = "", posterUrl = ""),
                                 isLoading = true
                             )
                         }
@@ -178,6 +133,71 @@ fun SearchScreen(
                         }
                     }
                 }
+            }
+        }
+    }
+}
+
+@Composable
+fun SearchBarContainer(state: SearchUiState, viewModel: SearchViewModel) {
+    val searchBarGradient = Brush.verticalGradient(
+        colors = listOf(
+            Color(0xFF383838), // Top: slightly lighter to lift it visually
+            Color(0xFF2C2C2C), // Middle: matches card top
+            Color(0xFF242424)  // Bottom: gentle transition
+        )
+    )
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+            .height(56.dp),
+        shape = RoundedCornerShape(30.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.Transparent)
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(brush = searchBarGradient, shape = RoundedCornerShape(30.dp))
+                .clip(RoundedCornerShape(30.dp))
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Search,
+                    contentDescription = "Search",
+                    tint = Color.White
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                TextField(
+                    value = state.query,
+                    onValueChange = { viewModel.onSearchQueryChanged(it) },
+                    placeholder = {
+                        Text(
+                            text = "Find movies",
+                            color = Color.White.copy(alpha = 0.6f)
+                        )
+                    },
+                    singleLine = true,
+                    colors = TextFieldDefaults.colors(
+                        focusedContainerColor = Color.Transparent,
+                        unfocusedContainerColor = Color.Transparent,
+                        disabledContainerColor = Color.Transparent,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        cursorColor = Color.White,
+                        focusedTextColor = Color.White,
+                        unfocusedTextColor = Color.White
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Color.Transparent)
+                )
             }
         }
     }
