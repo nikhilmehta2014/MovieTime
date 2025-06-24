@@ -6,6 +6,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import androidx.navigation.navDeepLink
 import com.nikhil.movietime.ui.favorite.presentation.FavoriteScreen
 import com.nikhil.movietime.ui.home.presentation.HomeScreen
 import com.nikhil.movietime.ui.moviedetails.presentation.MovieDetailsScreen
@@ -26,7 +27,12 @@ fun NavigationGraph(navController: NavHostController) {
         }
         composable(
             route = Routes.MOVIE_DETAILS_WITH_ARG,
-            arguments = listOf(navArgument("movieId") { type = NavType.IntType })
+            arguments = listOf(navArgument("movieId") { type = NavType.IntType }),
+            deepLinks = listOf(
+                navDeepLink {
+                    uriPattern = "https://movietime.fake/movie/{movieId}"
+                }
+            )
         ) { backStackEntry ->
             val movieId = backStackEntry.arguments?.getInt("movieId") ?: return@composable
             MovieDetailsScreen(movieId = movieId, navController = navController)

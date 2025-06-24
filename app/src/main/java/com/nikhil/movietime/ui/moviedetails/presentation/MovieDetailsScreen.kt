@@ -253,12 +253,13 @@ fun MovieDetailsScreen(
                 endPadding = 12.dp,
                 onClick = {
                     state.movie.let { movie ->
+                        val shareUri = "https://movietime.fake/movie/$movieId"
                         val shareIntent = Intent(Intent.ACTION_SEND).apply {
                             type = "text/plain"
-                            putExtra(Intent.EXTRA_SUBJECT, movie.title)
+                            putExtra(Intent.EXTRA_SUBJECT, "Check out this movie: ${movie.title}")
                             putExtra(
                                 Intent.EXTRA_TEXT,
-                                "Check out this movie: ${movie.title}\n\n${movie.overview}"
+                                "Watch this movie on MovieTime:\n$shareUri"
                             )
                         }
                         context.startActivity(Intent.createChooser(shareIntent, "Share via"))
