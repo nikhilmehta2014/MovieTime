@@ -91,7 +91,6 @@ fun MovieDetailsScreen(
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color(0xFF8D6E63))
                     .verticalScroll(rememberScrollState())
             ) {
                 // Top Backdrop
@@ -268,6 +267,7 @@ fun MovieDetailsScreen(
                 image = Icons.Default.Share,
                 contentDescription = "Share"
             )
+            var isFavorite = false
             MenuIconButton(
                 alignment = Alignment.TopEnd,
                 topPadding = 68.dp, // 12dp top + 40dp height + 16dp space
@@ -275,8 +275,18 @@ fun MovieDetailsScreen(
                 onClick = {
                     state.movie.let { viewModel.toggleFavorite(it) }
                 },
-                image = if (viewModel.isFavorite.value) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                contentDescription = "Bookmark"
+                image = if (viewModel.isFavorite.value)
+                {
+                    isFavorite = true
+                    Icons.Default.Favorite
+                }
+                else
+                {
+                    isFavorite = false
+                    Icons.Default.FavoriteBorder
+                },
+                contentDescription = "Bookmark",
+                isFavorite = isFavorite
             )
         }
 

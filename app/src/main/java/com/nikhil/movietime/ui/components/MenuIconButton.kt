@@ -24,7 +24,8 @@ fun MenuIconButton(
     endPadding: Dp = 0.dp,
     onClick: () -> Unit,
     image: ImageVector,
-    contentDescription: String
+    contentDescription: String,
+    isFavorite: Boolean = false
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         Box(
@@ -43,7 +44,7 @@ fun MenuIconButton(
                 Icon(
                     imageVector = image,
                     contentDescription = contentDescription,
-                    tint = Color.White
+                    tint = if (isFavorite) Color(0xFFFF4C4C) else Color.White
                 )
             }
         }
