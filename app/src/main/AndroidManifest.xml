@@ -19,6 +19,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.MovieTime">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,13 +29,14 @@
 
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:scheme="https"
                     android:host="movietime.fake"
-                    android:pathPrefix="/movie" />
+                    android:pathPrefix="/movie"
+                    android:scheme="https" />
             </intent-filter>
         </activity>
     </application>

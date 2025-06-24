@@ -5,23 +5,6 @@ import com.nikhil.movietime.core.data.local.entities.MovieDetailsEntity
 import com.nikhil.movietime.ui.moviedetails.data.model.MovieDetailsDto
 import com.nikhil.movietime.core.domain.model.Movie
 
-fun MovieDetailsDto.toDomain(): Movie {
-    return Movie(
-        id = id,
-        title = title,
-        tagline = tagline,
-        overview = overview,
-        status = status,
-        posterUrl = "https://image.tmdb.org/t/p/w500$posterPath",
-        backdropUrl = "https://image.tmdb.org/t/p/w500$backdropPath",
-        runtime = formatRuntime(runtime.toInt()),
-        releaseYear = extractYear(releaseDate),
-        adult = if (adult) "A" else "U",
-        rating = 0F,
-        genres = genres.map { it.name }
-    )
-}
-
 fun Movie.toEntity(): FavoriteMovieEntity {
     return FavoriteMovieEntity(
         id = id,
@@ -70,7 +53,7 @@ private fun formatRuntime(runtimeInMinutes: Int): String {
     } else {
         val hours = runtimeInMinutes / 60
         val minutes = runtimeInMinutes % 60
-        "${hours} h ${minutes} m"
+        "$hours h $minutes m"
     }
 }
 

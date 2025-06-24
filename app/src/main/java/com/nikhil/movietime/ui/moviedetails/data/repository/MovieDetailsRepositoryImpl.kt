@@ -1,6 +1,5 @@
 package com.nikhil.movietime.ui.moviedetails.data.repository
 
-import android.util.Log
 import com.nikhil.movietime.core.data.local.MovieDao
 import com.nikhil.movietime.core.domain.model.Movie
 import com.nikhil.movietime.core.network.ApiService
@@ -16,7 +15,7 @@ class MovieDetailsRepositoryImpl @Inject constructor(
     private val dao: MovieDao
 ) : MovieDetailsRepository {
 
-    override suspend fun getMovieDetails(movieId: Int): Flow<Movie> {
+    override suspend fun getMovieDetails(movieId: Int): Flow<Movie?> {
         return dao.getMovieDetails(movieId)
             .map { it.toDomain() }
     }
@@ -25,9 +24,8 @@ class MovieDetailsRepositoryImpl @Inject constructor(
         try {
             val movieDetailsDto = api.getMovieDetails(movieId = movieId)
             dao.insertDetails(movieDetailsDto.toEntity())
-        } catch (e: Exception) {
-            val error = e.message ?: "Something went wrong"
-            Log.d("asdf", "error=$error")
+        } catch (_: Exception) {
+            // no-op
         }
     }
 }

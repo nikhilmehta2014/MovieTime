@@ -28,7 +28,7 @@ fun Brush.Companion.shimmer(): Brush {
         label = "shimmer_anim"
     )
 
-    return Brush.linearGradient(
+    return linearGradient(
         colors = shimmerColors,
         start = Offset.Zero,
         end = Offset(x = translateAnim.value, y = translateAnim.value)

@@ -5,7 +5,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.nikhil.movietime.core.domain.model.Movie
 import com.nikhil.movietime.core.domain.repository.MovieRepository
 import com.nikhil.movietime.core.network.NetworkMonitor
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -60,7 +59,7 @@ class HomeViewModel @Inject constructor(
                         nowPlaying = nowPlaying,
                         isLoading = false,
                         errorMessage = null,
-                        hasLocalData = hasLocal
+                        hasLocalData = true
                     )
                 }
             }
