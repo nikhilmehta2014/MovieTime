@@ -35,6 +35,11 @@ fun HomeScreen(
         return
     }
 
+    val renderRow: @Composable (String, List<Movie>) -> Unit = { title, movies ->
+        HeadingTitle(title = title)
+        MovieRow(movieList = movies, isLoading = state.isLoading, onClick = onMovieClick)
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -42,51 +47,31 @@ fun HomeScreen(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
-        HeadingTitle(title = "Trending")
+        renderRow("Trending", state.trending)
+        renderRow("Now Playing", state.nowPlaying)
+    }
+}
 
-        LazyRow(
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            contentPadding = PaddingValues(horizontal = 8.dp)
-        ) {
-            if (state.isLoading) {
-                items(5) {
-                    MovieCard(isLoading = true)
-                }
-            } else {
-                items(state.trending) { trendingMovie ->
-                    MovieCard(
-                        movie = Movie(
-                            id = trendingMovie.id,
-                            title = trendingMovie.title,
-                            posterUrl = trendingMovie.posterUrl
-                        ),
-                        onClick = { onMovieClick(trendingMovie.id) }
-                    )
-                }
+@Composable
+fun MovieRow(movieList: List<Movie>, isLoading: Boolean, onClick: (Int) -> Unit) {
+    LazyRow(
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        contentPadding = PaddingValues(horizontal = 8.dp)
+    ) {
+        if (isLoading) {
+            items(5) {
+                MovieCard(isLoading = true)
             }
-        }
-
-        HeadingTitle(title = "Now Playing")
-
-        LazyRow(
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            contentPadding = PaddingValues(horizontal = 8.dp)
-        ) {
-            if (state.isLoading) {
-                items(5) {
-                    MovieCard(isLoading = true)
-                }
-            } else {
-                items(state.nowPlaying) { nowPlayingMovie ->
-                    MovieCard(
-                        movie = Movie(
-                            id = nowPlayingMovie.id,
-                            title = nowPlayingMovie.title,
-                            posterUrl = nowPlayingMovie.posterUrl
-                        ),
-                        onClick = { onMovieClick(nowPlayingMovie.id) }
-                    )
-                }
+        } else {
+            items(movieList) { movie ->
+                MovieCard(
+                    movie = Movie(
+                        id = movie.id,
+                        title = movie.title,
+                        posterUrl = movie.posterUrl
+                    ),
+                    onClick = { onClick(movie.id) }
+                )
             }
         }
     }

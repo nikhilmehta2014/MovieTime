@@ -75,74 +75,8 @@ fun SearchScreen(
                     modifier = Modifier.padding(start = 24.dp, top = 4.dp)
                 )
             }
-            // Title
-            if (state.isLoading) {
-                Spacer(
-                    modifier = Modifier
-                        .padding(top = 8.dp)
-                        .height(16.dp)
-                        .fillMaxWidth(0.4f)
-                        .background(Brush.shimmer())
-                )
-            } else if (state.movies.isNotEmpty()) {
-                HeadingTitle(title = "Movies")
-            }
-
-            // Movies List
-            Box(modifier = Modifier.fillMaxSize()) {
-                if (state.isLoading) {
-                    LazyColumn(
-                        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-                        verticalArrangement = Arrangement.spacedBy(12.dp)
-                    ) {
-                        items(6) {
-                            MovieListItem(
-                                movie = Movie(id = 0, title = "", posterUrl = ""),
-                                isLoading = true
-                            )
-                        }
-                    }
-                } else {
-                    when {
-                        state.movies.isNotEmpty() -> {
-                            LazyColumn(
-                                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-                                verticalArrangement = Arrangement.spacedBy(12.dp)
-                            ) {
-                                items(state.movies) { movie ->
-                                    MovieListItem(
-                                        movie = movie.toMovie(),
-                                        onClick = {
-                                            navController.navigate("${Routes.MOVIE_DETAILS}/${movie.id}")
-                                        },
-                                        onFavoriteClick = { movieDetails ->
-                                            viewModel.toggleFavorite(movieDetails)
-                                        },
-                                        isFavorite = favoriteMovieIds.contains(movie.id),
-                                    )
-                                }
-                            }
-                        }
-
-                        state.query.isEmpty() -> {
-                            ErrorCard(
-                                imageId = R.drawable.movie_search,
-                                imageContentDescription = "Search for movies",
-                                text = "Search for movies",
-                            )
-                        }
-
-                        state.query.length >= 3 -> {
-                            // Show "No results found" only when search is valid but result is empty
-                            ErrorCard(
-                                imageId = R.drawable.no_movie_found,
-                                imageContentDescription = "No movie found",
-                                text = "No Movie Found",
-                            )
-                        }
-                    }
-                }
-            }
+            TitleRow(state)
+            MoviesList(navController, state, viewModel, favoriteMovieIds)
         }
     }
 }
@@ -207,6 +141,84 @@ fun SearchBarContainer(state: SearchUiState, viewModel: SearchViewModel) {
                         .fillMaxWidth()
                         .background(Color.Transparent)
                 )
+            }
+        }
+    }
+}
+
+@Composable
+fun TitleRow(state: SearchUiState) {
+    if (state.isLoading) {
+        Spacer(
+            modifier = Modifier
+                .padding(top = 8.dp)
+                .height(16.dp)
+                .fillMaxWidth(0.4f)
+                .background(Brush.shimmer())
+        )
+    } else if (state.movies.isNotEmpty()) {
+        HeadingTitle(title = "Movies")
+    }
+}
+
+@Composable
+fun MoviesList(
+    navController: NavController,
+    state: SearchUiState,
+    viewModel: SearchViewModel,
+    favoriteMovieIds: Set<Int>
+) {
+    Box(modifier = Modifier.fillMaxSize()) {
+        if (state.isLoading) {
+            LazyColumn(
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                items(6) {
+                    MovieListItem(
+                        movie = Movie(id = 0, title = "", posterUrl = ""),
+                        isLoading = true
+                    )
+                }
+            }
+        } else {
+            when {
+                state.movies.isNotEmpty() -> {
+                    LazyColumn(
+                        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        items(state.movies) { movie ->
+                            MovieListItem(
+                                movie = movie.toMovie(),
+                                onClick = {
+                                    navController.navigate("${Routes.MOVIE_DETAILS}/${movie.id}")
+                                },
+                                onFavoriteClick = { movieDetails ->
+                                    viewModel.toggleFavorite(movieDetails)
+                                },
+                                isFavorite = favoriteMovieIds.contains(movie.id),
+                            )
+                        }
+                    }
+                }
+
+                state.query.isEmpty() -> {
+                    ErrorCard(
+                        imageId = R.drawable.movie_search,
+                        imageContentDescription = "Search for movies",
+                        text = "Search for movies",
+                    )
+                }
+
+                state.query.length >= 3 -> {
+                    // Show "No results found" only when search is valid but result is empty
+                    ErrorCard(
+                        imageId = R.drawable.no_movie_found,
+                        imageContentDescription = "No movie found",
+                        text = "No Movie Found",
+                    )
+                }
             }
         }
     }
