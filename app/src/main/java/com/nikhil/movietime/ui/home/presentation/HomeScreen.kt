@@ -26,7 +26,7 @@ fun HomeScreen(
 ) {
     val state = viewModel.state
 
-    if (!state.isConnected && !state.hasLocalData && !state.isLoading) {
+    if (!state.isConnected && !state.hasLocalData) {
         ErrorCard(
             imageId = R.drawable.cloud_off,
             imageContentDescription = "No Internet",
