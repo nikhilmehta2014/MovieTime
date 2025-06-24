@@ -15,6 +15,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
@@ -69,7 +72,7 @@ fun BottomNavigationBar(
 
                     IconButton(onClick = { onItemSelected(item) }) {
                         Icon(
-                            imageVector = item.icon,
+                            imageVector = if (isSelected) item.selectedIcon else item.unselectedIcon,
                             contentDescription = item.label,
                             tint = if (isSelected) selectedColor else unselectedColor,
                             modifier = Modifier.size(24.dp)
@@ -87,17 +90,20 @@ fun BottomNavigationBarPreview() {
     val items = listOf(
         BottomNavItem(
             route = "home",
-            icon = Icons.Default.Home,
+            selectedIcon = Icons.Filled.Home,
+            unselectedIcon = Icons.Outlined.Home,
             label = "Home"
         ),
         BottomNavItem(
             route = "search",
-            icon = Icons.Default.Search,
+            selectedIcon = Icons.Filled.Search,
+            unselectedIcon = Icons.Outlined.Search,
             label = "Search"
         ),
         BottomNavItem(
             route = "saved",
-            icon = Icons.Default.Favorite,
+            selectedIcon = Icons.Filled.Favorite,
+            unselectedIcon = Icons.Outlined.FavoriteBorder,
             label = "Saved"
         )
     )
