@@ -57,6 +57,8 @@ import coil3.compose.AsyncImage
 import com.nikhil.movietime.R
 import com.nikhil.movietime.ui.components.LabelCard
 import com.nikhil.movietime.ui.components.ErrorCard
+import com.nikhil.movietime.ui.components.MenuIconButton
+import com.nikhil.movietime.ui.components.shimmer
 
 @Composable
 fun MovieDetailsScreen(
@@ -74,30 +76,6 @@ fun MovieDetailsScreen(
 
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp
     val screenWidth = LocalConfiguration.current.screenWidthDp.dp
-
-    // Shimmer animation setup
-    val shimmerColors = listOf(
-        Color.LightGray.copy(alpha = 0.6f),
-        Color.LightGray.copy(alpha = 0.2f),
-        Color.LightGray.copy(alpha = 0.6f)
-    )
-
-    val transition = rememberInfiniteTransition(label = "shimmer")
-    val shimmerTranslate = transition.animateFloat(
-        initialValue = 0f,
-        targetValue = 1000f,
-        animationSpec = infiniteRepeatable(
-            tween(1000, easing = LinearEasing),
-            repeatMode = RepeatMode.Restart
-        ),
-        label = "shimmer-translate"
-    )
-
-    val shimmerBrush = Brush.linearGradient(
-        colors = shimmerColors,
-        start = Offset(shimmerTranslate.value, shimmerTranslate.value),
-        end = Offset(shimmerTranslate.value + 200f, shimmerTranslate.value + 200f)
-    )
 
     Box(modifier = Modifier.fillMaxSize()) {
         // TODO - This is being called continuously, check it
@@ -126,7 +104,7 @@ fun MovieDetailsScreen(
                         Spacer(
                             modifier = Modifier
                                 .matchParentSize()
-                                .background(shimmerBrush)
+                                .background(Brush.shimmer())
                         )
                     } else {
                         AsyncImage(
@@ -154,7 +132,7 @@ fun MovieDetailsScreen(
                                     .height(screenHeight * 0.2f)
                                     .width(screenWidth * 0.25f)
                                     .clip(RoundedCornerShape(8.dp))
-                                    .background(shimmerBrush)
+                                    .background(Brush.shimmer())
                             )
                         } else {
                             AsyncImage(
@@ -186,7 +164,7 @@ fun MovieDetailsScreen(
                                         .height(24.dp)
                                         .fillMaxWidth(0.6f)
                                         .clip(RoundedCornerShape(4.dp))
-                                        .background(shimmerBrush)
+                                        .background(Brush.shimmer())
                                 )
                                 Spacer(modifier = Modifier.height(8.dp))
                                 Spacer(
@@ -194,7 +172,7 @@ fun MovieDetailsScreen(
                                         .height(18.dp)
                                         .fillMaxWidth(0.4f)
                                         .clip(RoundedCornerShape(4.dp))
-                                        .background(shimmerBrush)
+                                        .background(Brush.shimmer())
                                 )
                             } else {
                                 Text(
@@ -244,7 +222,7 @@ fun MovieDetailsScreen(
                                     .fillMaxWidth()
                                     .height(16.dp)
                                     .clip(RoundedCornerShape(4.dp))
-                                    .background(shimmerBrush)
+                                    .background(Brush.shimmer())
                             )
                             Spacer(modifier = Modifier.height(8.dp))
                         }
@@ -260,33 +238,21 @@ fun MovieDetailsScreen(
         }
 
         // Back, Share and Bookmark buttons
-        Box(
-            modifier = Modifier
-                .align(Alignment.TopStart)
-                .padding(start = 12.dp, top = 12.dp)
-                .size(40.dp)
-                .background(Color.Black.copy(alpha = 0.6f), shape = CircleShape),
-            contentAlignment = Alignment.Center
-        ) {
-            IconButton(onClick = { navController.popBackStack() }) {
-                Icon(
-                    imageVector = Icons.Default.ArrowBack,
-                    contentDescription = "Back",
-                    tint = Color.White
-                )
-            }
-        }
+        MenuIconButton(
+            alignment = Alignment.TopStart,
+            startPadding = 12.dp,
+            topPadding = 12.dp,
+            onClick = { navController.popBackStack() },
+            image = Icons.Default.ArrowBack,
+            contentDescription = "Back"
+        )
 
         if (state.movie != null) {
-            Box(
-                modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .padding(end = 12.dp, top = 12.dp)
-                    .size(40.dp)
-                    .background(Color.Black.copy(alpha = 0.6f), shape = CircleShape),
-                contentAlignment = Alignment.Center
-            ) {
-                IconButton(onClick = {
+            MenuIconButton(
+                alignment = Alignment.TopEnd,
+                topPadding = 12.dp,
+                endPadding = 12.dp,
+                onClick = {
                     state.movie.let { movie ->
                         val shareIntent = Intent(Intent.ACTION_SEND).apply {
                             type = "text/plain"
@@ -298,33 +264,20 @@ fun MovieDetailsScreen(
                         }
                         context.startActivity(Intent.createChooser(shareIntent, "Share via"))
                     }
-                }) {
-                    Icon(
-                        imageVector = Icons.Default.Share,
-                        contentDescription = "Share",
-                        tint = Color.White
-                    )
-                }
-            }
-
-            Box(
-                modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .padding(end = 12.dp, top = 68.dp) // 12dp top + 40dp height + 16dp space
-                    .size(40.dp)
-                    .background(Color.Black.copy(alpha = 0.6f), shape = CircleShape),
-                contentAlignment = Alignment.Center
-            ) {
-                IconButton(onClick = {
+                },
+                image = Icons.Default.Share,
+                contentDescription = "Share"
+            )
+            MenuIconButton(
+                alignment = Alignment.TopEnd,
+                topPadding = 68.dp, // 12dp top + 40dp height + 16dp space
+                endPadding = 12.dp,
+                onClick = {
                     state.movie.let { viewModel.toggleFavorite(it) }
-                }) {
-                    Icon(
-                        imageVector = if (viewModel.isFavorite.value) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                        contentDescription = "Bookmark",
-                        tint = Color.White
-                    )
-                }
-            }
+                },
+                image = if (viewModel.isFavorite.value) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                contentDescription = "Bookmark"
+            )
         }
 
         if (state.movie != null) {
