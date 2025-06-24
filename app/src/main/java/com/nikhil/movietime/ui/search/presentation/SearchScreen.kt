@@ -33,6 +33,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.nikhil.movietime.R
@@ -69,6 +70,7 @@ fun SearchScreen(
                 Text(
                     text = state.errorMessage ?: "",
                     color = Color.Red,
+                    fontSize = 20.sp,
                     style = MaterialTheme.typography.bodySmall,
                     modifier = Modifier.padding(start = 24.dp, top = 4.dp)
                 )
@@ -120,6 +122,14 @@ fun SearchScreen(
                                     )
                                 }
                             }
+                        }
+
+                        state.query.isEmpty() -> {
+                            ErrorCard(
+                                imageId = R.drawable.movie_search,
+                                imageContentDescription = "Search for movies",
+                                text = "Search for movies",
+                            )
                         }
 
                         state.query.length >= 3 -> {
