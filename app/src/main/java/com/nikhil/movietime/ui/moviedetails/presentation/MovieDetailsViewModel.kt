@@ -60,8 +60,7 @@ class MovieDetailsViewModel @Inject constructor(
                     }
                 }
                 .collect { details ->
-                    val hasLocalData =
-                        details != null  // TODO - check this code - "details != null"
+                    val hasLocalData = details != null
                     _state.update {
                         it.copy(
                             movie = details,

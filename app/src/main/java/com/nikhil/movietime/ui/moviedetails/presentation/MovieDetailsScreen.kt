@@ -1,12 +1,6 @@
 package com.nikhil.movietime.ui.moviedetails.presentation
 
 import android.content.Intent
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -17,12 +11,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -30,8 +22,6 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Share
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -40,13 +30,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -55,8 +45,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 import com.nikhil.movietime.R
-import com.nikhil.movietime.ui.components.LabelCard
 import com.nikhil.movietime.ui.components.ErrorCard
+import com.nikhil.movietime.ui.components.LabelCard
 import com.nikhil.movietime.ui.components.MenuIconButton
 import com.nikhil.movietime.ui.components.shimmer
 
@@ -74,13 +64,12 @@ fun MovieDetailsScreen(
     val state = viewModel.state.collectAsState().value
     val context = LocalContext.current
 
-    val screenHeight = LocalConfiguration.current.screenHeightDp.dp
-    val screenWidth = LocalConfiguration.current.screenWidthDp.dp
+    val windowInfo = LocalWindowInfo.current
+    val screenHeight = with(LocalDensity.current) { windowInfo.containerSize.height.toDp() }
+    val screenWidth = with(LocalDensity.current) { windowInfo.containerSize.width.toDp() }
 
     Box(modifier = Modifier.fillMaxSize()) {
-        // TODO - This is being called continuously, check it
         // Show offline screen if no internet + no local data
-//        Log.d("asdf", "MovieDetailsScreen, state.hasLocalData=${state.hasLocalData}")
         if (!state.isConnected && !state.hasLocalData && !state.isLoading) {
             ErrorCard(
                 imageId = R.drawable.cloud_off,
