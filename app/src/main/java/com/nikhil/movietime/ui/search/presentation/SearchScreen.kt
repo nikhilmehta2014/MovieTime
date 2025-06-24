@@ -85,9 +85,9 @@ fun SearchScreen(
 fun SearchBarContainer(state: SearchUiState, viewModel: SearchViewModel) {
     val searchBarGradient = Brush.verticalGradient(
         colors = listOf(
-            Color(0xFF383838), // Top: slightly lighter to lift it visually
-            Color(0xFF2C2C2C), // Middle: matches card top
-            Color(0xFF242424)  // Bottom: gentle transition
+            Color(0xFF383838),
+            Color(0xFF2C2C2C),
+            Color(0xFF242424)
         )
     )
     Card(

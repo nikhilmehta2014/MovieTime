@@ -27,7 +27,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // This ensures the system applies padding for status/navigation bars.
         WindowCompat.setDecorFitsSystemWindows(window, true)
 
         setContent {

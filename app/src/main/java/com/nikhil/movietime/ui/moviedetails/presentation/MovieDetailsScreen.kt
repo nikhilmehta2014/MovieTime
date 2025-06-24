@@ -268,7 +268,6 @@ fun MenuIcons(
     viewModel: MovieDetailsViewModel,
     movieId: Int
 ) {
-    // Back, Share and Bookmark buttons
     MenuIconButton(
         alignment = Alignment.TopStart,
         startPadding = 12.dp,

@@ -26,7 +26,7 @@ class MovieRepositoryImpl @Inject constructor(
             dao.clearHomeMovies()
             dao.insertAll(remote.map { it.toEntity(isTrending = true, isNowPlaying = false) })
         } catch (_: Exception) {
-            // Ignore, fallback to local
+            // no-op
         }
     }
 
@@ -38,7 +38,7 @@ class MovieRepositoryImpl @Inject constructor(
             val remote = api.getNowPlayingMovies().movies
             dao.insertAll(remote.map { it.toEntity(isTrending = false, isNowPlaying = true) })
         } catch (_: Exception) {
-            // Ignore, fallback to local
+            // no-op
         }
     }
 

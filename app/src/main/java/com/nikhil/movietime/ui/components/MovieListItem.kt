@@ -55,9 +55,9 @@ fun MovieListItem(
     ) {
         val cardGradient = Brush.verticalGradient(
             colors = listOf(
-                Color(0xFF2C2C2C), // Top - lighter gray
-                Color(0xFF1F1F1F), // Middle - base dark gray
-                Color(0xFF1A1A1A)  // Bottom - slightly darker
+                Color(0xFF2C2C2C),
+                Color(0xFF1F1F1F),
+                Color(0xFF1A1A1A)
             )
         )
         Card(
