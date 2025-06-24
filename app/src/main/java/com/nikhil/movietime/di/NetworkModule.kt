@@ -2,6 +2,7 @@ package com.nikhil.movietime.di
 
 import com.nikhil.movietime.BuildConfig
 import com.nikhil.movietime.core.network.ApiService
+import com.nikhil.movietime.core.network.RetryInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -11,6 +12,7 @@ import retrofit2.Retrofit
 import javax.inject.Singleton
 import dagger.hilt.components.SingletonComponent
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -32,6 +34,10 @@ object NetworkModule {
             .addInterceptor(HttpLoggingInterceptor().apply {
                 level = HttpLoggingInterceptor.Level.BODY
             })
+            .addInterceptor(RetryInterceptor(maxRetry = 3))
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .writeTimeout(30, TimeUnit.SECONDS)
             .build()
     }
 

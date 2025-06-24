@@ -109,8 +109,8 @@ fun MovieDetailsScreen(
 
         MenuIcons(navController, context, state, viewModel, movieId)
 
-        if (state.movie != null) {
-            state.error?.let {
+        if (!state.hasLocalData && state.error != null && state.isConnected) {
+            state.error.let {
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
