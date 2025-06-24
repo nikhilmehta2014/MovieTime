@@ -1,5 +1,6 @@
 package com.nikhil.movietime.ui.moviedetails.presentation
 
+import android.content.Context
 import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -40,6 +41,7 @@ import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -82,31 +84,7 @@ fun MovieDetailsScreen(
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState())
             ) {
-                // Top Backdrop
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(screenHeight * 0.3f)
-                ) {
-                    if (state.isLoading) {
-                        Spacer(
-                            modifier = Modifier
-                                .matchParentSize()
-                                .background(Brush.shimmer())
-                        )
-                    } else {
-                        AsyncImage(
-                            model = state.movie?.backdropUrl?.takeIf { it.isNotEmpty() }
-                                ?.let { "https://image.tmdb.org/t/p/w780$it" },
-                            contentDescription = null,
-                            contentScale = ContentScale.Crop,
-                            error = painterResource(R.drawable.error_banner),
-                            fallback = painterResource(R.drawable.fallback_banner),
-                            modifier = Modifier.matchParentSize()
-                        )
-                    }
-                }
-
+                BackdropImage(state, screenHeight)
                 Column(
                     modifier = Modifier
                         .padding(top = screenHeight * 0.25f)
@@ -114,171 +92,22 @@ fun MovieDetailsScreen(
                         .padding(horizontal = 16.dp)
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        if (state.isLoading) {
-                            Spacer(
-                                modifier = Modifier
-                                    .height(screenHeight * 0.2f)
-                                    .width(screenWidth * 0.25f)
-                                    .clip(RoundedCornerShape(8.dp))
-                                    .background(Brush.shimmer())
-                            )
-                        } else {
-                            AsyncImage(
-                                model = state.movie?.posterUrl?.takeIf { it.isNotEmpty() }
-                                    ?.let { "https://image.tmdb.org/t/p/w342$it" },
-                                contentDescription = null,
-                                contentScale = ContentScale.Crop,
-                                error = painterResource(R.drawable.error_poster),
-                                fallback = painterResource(R.drawable.fallback_poster),
-                                modifier = Modifier
-                                    .height(screenHeight * 0.2f)
-                                    .width(screenWidth * 0.25f)
-                                    .graphicsLayer {
-                                        shadowElevation = 16f
-                                        shape = RoundedCornerShape(12.dp)
-                                        clip = true
-                                        renderEffect = null
-                                    }
-                                    .background(Color.White, RoundedCornerShape(12.dp))
-                            )
-                        }
-
+                        PosterImage(state, screenWidth, screenHeight)
                         Spacer(modifier = Modifier.width(16.dp))
 
                         Column(modifier = Modifier.fillMaxWidth()) {
-                            if (state.isLoading) {
-                                Spacer(
-                                    modifier = Modifier
-                                        .height(24.dp)
-                                        .fillMaxWidth(0.6f)
-                                        .clip(RoundedCornerShape(4.dp))
-                                        .background(Brush.shimmer())
-                                )
-                                Spacer(modifier = Modifier.height(8.dp))
-                                Spacer(
-                                    modifier = Modifier
-                                        .height(18.dp)
-                                        .fillMaxWidth(0.4f)
-                                        .clip(RoundedCornerShape(4.dp))
-                                        .background(Brush.shimmer())
-                                )
-                            } else {
-                                Text(
-                                    text = state.movie?.title.orEmpty(),
-                                    style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
-                                    color = Color.White
-                                )
-                                state.movie?.tagline?.takeIf { it.isNotEmpty() }?.let {
-                                    Text(
-                                        text = it,
-                                        style = MaterialTheme.typography.bodyMedium,
-                                        color = Color.White,
-                                        fontStyle = FontStyle.Italic
-                                    )
-                                }
-                            }
+                            TitleAndTagline(state)
                         }
                     }
-
                     Spacer(modifier = Modifier.height(24.dp))
-
-                    LazyRow(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 8.dp)
-                    ) {
-                        state.movie?.let {
-                            val labelList = buildList {
-                                it.runtime.takeIf { it.isNotEmpty() }?.let { add(it) }
-                                it.releaseYear.takeIf { it.isNotEmpty() }?.let { add(it) }
-                                add(it.adult)
-                                addAll(it.genres)
-                            }
-                            items(labelList) { label ->
-                                LabelCard(text = label)
-                            }
-                        }
-                    }
-
+                    LabelList(state)
                     Spacer(modifier = Modifier.height(24.dp))
-
-                    if (state.isLoading) {
-                        repeat(4) {
-                            Spacer(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(16.dp)
-                                    .clip(RoundedCornerShape(4.dp))
-                                    .background(Brush.shimmer())
-                            )
-                            Spacer(modifier = Modifier.height(8.dp))
-                        }
-                    } else {
-                        Text(
-                            text = state.movie?.overview.orEmpty(),
-                            color = Color.White,
-                            style = MaterialTheme.typography.titleMedium
-                        )
-                    }
+                    OverviewText(state)
                 }
             }
         }
 
-        // Back, Share and Bookmark buttons
-        MenuIconButton(
-            alignment = Alignment.TopStart,
-            startPadding = 12.dp,
-            topPadding = 12.dp,
-            onClick = { navController.popBackStack() },
-            image = Icons.Default.ArrowBack,
-            contentDescription = "Back"
-        )
-
-        if (state.movie != null) {
-            MenuIconButton(
-                alignment = Alignment.TopEnd,
-                topPadding = 12.dp,
-                endPadding = 12.dp,
-                onClick = {
-                    state.movie.let { movie ->
-                        val shareUri = "https://movietime.fake/movie/$movieId"
-                        val shareIntent = Intent(Intent.ACTION_SEND).apply {
-                            type = "text/plain"
-                            putExtra(Intent.EXTRA_SUBJECT, "Check out this movie: ${movie.title}")
-                            putExtra(
-                                Intent.EXTRA_TEXT,
-                                "Watch this movie on MovieTime:\n$shareUri"
-                            )
-                        }
-                        context.startActivity(Intent.createChooser(shareIntent, "Share via"))
-                    }
-                },
-                image = Icons.Default.Share,
-                contentDescription = "Share"
-            )
-            var isFavorite = false
-            MenuIconButton(
-                alignment = Alignment.TopEnd,
-                topPadding = 68.dp, // 12dp top + 40dp height + 16dp space
-                endPadding = 12.dp,
-                onClick = {
-                    state.movie.let { viewModel.toggleFavorite(it) }
-                },
-                image = if (viewModel.isFavorite.value)
-                {
-                    isFavorite = true
-                    Icons.Default.Favorite
-                }
-                else
-                {
-                    isFavorite = false
-                    Icons.Default.FavoriteBorder
-                },
-                contentDescription = "Bookmark",
-                isFavorite = isFavorite
-            )
-        }
+        MenuIcons(navController, context, state, viewModel, movieId)
 
         if (state.movie != null) {
             state.error?.let {
@@ -290,5 +119,204 @@ fun MovieDetailsScreen(
                 }
             }
         }
+    }
+}
+
+@Composable
+fun BackdropImage(state: MovieDetailsState, screenHeight: Dp) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(screenHeight * 0.3f)
+    ) {
+        if (state.isLoading) {
+            Spacer(
+                modifier = Modifier
+                    .matchParentSize()
+                    .background(Brush.shimmer())
+            )
+        } else {
+            AsyncImage(
+                model = state.movie?.backdropUrl?.takeIf { it.isNotEmpty() }
+                    ?.let { "https://image.tmdb.org/t/p/w780$it" },
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                error = painterResource(R.drawable.error_banner),
+                fallback = painterResource(R.drawable.fallback_banner),
+                modifier = Modifier.matchParentSize()
+            )
+        }
+    }
+}
+
+@Composable
+fun PosterImage(state: MovieDetailsState, screenWidth: Dp, screenHeight: Dp) {
+    if (state.isLoading) {
+        Spacer(
+            modifier = Modifier
+                .height(screenHeight * 0.2f)
+                .width(screenWidth * 0.25f)
+                .clip(RoundedCornerShape(8.dp))
+                .background(Brush.shimmer())
+        )
+    } else {
+        AsyncImage(
+            model = state.movie?.posterUrl?.takeIf { it.isNotEmpty() }
+                ?.let { "https://image.tmdb.org/t/p/w342$it" },
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            error = painterResource(R.drawable.error_poster),
+            fallback = painterResource(R.drawable.fallback_poster),
+            modifier = Modifier
+                .height(screenHeight * 0.2f)
+                .width(screenWidth * 0.25f)
+                .graphicsLayer {
+                    shadowElevation = 16f
+                    shape = RoundedCornerShape(12.dp)
+                    clip = true
+                    renderEffect = null
+                }
+                .background(Color.White, RoundedCornerShape(12.dp))
+        )
+    }
+}
+
+@Composable
+fun TitleAndTagline(state: MovieDetailsState) {
+    if (state.isLoading) {
+        Spacer(
+            modifier = Modifier
+                .height(24.dp)
+                .fillMaxWidth(0.6f)
+                .clip(RoundedCornerShape(4.dp))
+                .background(Brush.shimmer())
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(
+            modifier = Modifier
+                .height(18.dp)
+                .fillMaxWidth(0.4f)
+                .clip(RoundedCornerShape(4.dp))
+                .background(Brush.shimmer())
+        )
+    } else {
+        Text(
+            text = state.movie?.title.orEmpty(),
+            style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+            color = Color.White
+        )
+        state.movie?.tagline?.takeIf { it.isNotEmpty() }?.let {
+            Text(
+                text = it,
+                style = MaterialTheme.typography.bodyMedium,
+                color = Color.White,
+                fontStyle = FontStyle.Italic
+            )
+        }
+    }
+}
+
+@Composable
+fun LabelList(state: MovieDetailsState) {
+    LazyRow(
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp)
+    ) {
+        state.movie?.let {
+            val labelList = buildList {
+                it.runtime.takeIf { it.isNotEmpty() }?.let { add(it) }
+                it.releaseYear.takeIf { it.isNotEmpty() }?.let { add(it) }
+                add(it.adult)
+                addAll(it.genres)
+            }
+            items(labelList) { label ->
+                LabelCard(text = label)
+            }
+        }
+    }
+}
+
+@Composable
+fun OverviewText(state: MovieDetailsState) {
+    if (state.isLoading) {
+        repeat(4) {
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(16.dp)
+                    .clip(RoundedCornerShape(4.dp))
+                    .background(Brush.shimmer())
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+        }
+    } else {
+        Text(
+            text = state.movie?.overview.orEmpty(),
+            color = Color.White,
+            style = MaterialTheme.typography.titleMedium
+        )
+    }
+}
+
+@Composable
+fun MenuIcons(
+    navController: NavController,
+    context: Context,
+    state: MovieDetailsState,
+    viewModel: MovieDetailsViewModel,
+    movieId: Int
+) {
+    // Back, Share and Bookmark buttons
+    MenuIconButton(
+        alignment = Alignment.TopStart,
+        startPadding = 12.dp,
+        topPadding = 12.dp,
+        onClick = { navController.popBackStack() },
+        image = Icons.Default.ArrowBack,
+        contentDescription = "Back"
+    )
+
+    if (state.movie != null) {
+        MenuIconButton(
+            alignment = Alignment.TopEnd,
+            topPadding = 12.dp,
+            endPadding = 12.dp,
+            onClick = {
+                state.movie.let { movie ->
+                    val shareUri = "https://movietime.fake/movie/$movieId"
+                    val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                        type = "text/plain"
+                        putExtra(Intent.EXTRA_SUBJECT, "Check out this movie: ${movie.title}")
+                        putExtra(
+                            Intent.EXTRA_TEXT,
+                            "Watch this movie on MovieTime:\n$shareUri"
+                        )
+                    }
+                    context.startActivity(Intent.createChooser(shareIntent, "Share via"))
+                }
+            },
+            image = Icons.Default.Share,
+            contentDescription = "Share"
+        )
+        var isFavorite = false
+        MenuIconButton(
+            alignment = Alignment.TopEnd,
+            topPadding = 68.dp, // 12dp top + 40dp height + 16dp space
+            endPadding = 12.dp,
+            onClick = {
+                state.movie.let { viewModel.toggleFavorite(it) }
+            },
+            image = if (viewModel.isFavorite.value) {
+                isFavorite = true
+                Icons.Default.Favorite
+            } else {
+                isFavorite = false
+                Icons.Default.FavoriteBorder
+            },
+            contentDescription = "Bookmark",
+            isFavorite = isFavorite
+        )
     }
 }

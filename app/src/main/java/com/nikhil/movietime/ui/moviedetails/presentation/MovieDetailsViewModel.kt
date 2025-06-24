@@ -64,8 +64,8 @@ class MovieDetailsViewModel @Inject constructor(
                     _state.update {
                         it.copy(
                             movie = details,
+                            isLoading = false,
                             hasLocalData = hasLocalData,
-                            isLoading = false
                         )
                     }
                 }
