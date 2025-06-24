@@ -30,13 +30,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.nikhil.movietime.R
 import com.nikhil.movietime.core.domain.model.Movie
 import com.nikhil.movietime.ui.components.ErrorCard
+import com.nikhil.movietime.ui.components.HeadingTitle
 import com.nikhil.movietime.ui.components.MovieListItem
 import com.nikhil.movietime.ui.navigation.Routes
 import com.nikhil.movietime.ui.search.data.mapper.toMovie
@@ -114,14 +114,8 @@ fun SearchScreen(
 
             // Title
             if (!state.isLoading && state.movies.isNotEmpty()) {
-                Text(
-                    text = "Movies",
-                    style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp, vertical = 8.dp)
-                )
+                HeadingTitle(title = "Movies", titleColor = Color.Black)
             }
-
 
             // Movies List
             Box(modifier = Modifier.fillMaxSize()) {

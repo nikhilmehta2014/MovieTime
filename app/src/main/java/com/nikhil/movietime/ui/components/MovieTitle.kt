@@ -16,8 +16,7 @@ fun MovieTitle(
     Text(
         text = text,
         color = color,
-        fontSize = 24.sp,
-        fontWeight = FontWeight.Bold,
+
         modifier = modifier
     )
 }

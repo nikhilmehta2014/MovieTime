@@ -15,9 +15,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.nikhil.movietime.R
 import com.nikhil.movietime.core.domain.model.Movie
-import com.nikhil.movietime.ui.components.MovieCard
-import com.nikhil.movietime.ui.components.MovieTitle
 import com.nikhil.movietime.ui.components.ErrorCard
+import com.nikhil.movietime.ui.components.HeadingTitle
+import com.nikhil.movietime.ui.components.MovieCard
 
 @Composable
 fun HomeScreen(
@@ -42,7 +42,7 @@ fun HomeScreen(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
-        MovieTitle(text = "Trending")
+        HeadingTitle(title = "Trending")
 
         LazyRow(
             horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -66,7 +66,7 @@ fun HomeScreen(
             }
         }
 
-        MovieTitle(text = "Now Playing")
+        HeadingTitle(title = "Now Playing")
 
         LazyRow(
             horizontalArrangement = Arrangement.spacedBy(12.dp),
