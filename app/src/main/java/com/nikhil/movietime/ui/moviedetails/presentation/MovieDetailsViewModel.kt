@@ -1,6 +1,5 @@
 package com.nikhil.movietime.ui.moviedetails.presentation
 
-import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
@@ -43,13 +42,14 @@ class MovieDetailsViewModel @Inject constructor(
                 if (isOnline) {
                     repository.refreshMovieDetails(movieId) // Remote → Room
                 }
-                    observeLocalMovieDetails()
+                observeLocalMovieDetails()
             }
         }
     }
 
     private fun observeLocalMovieDetails() {
         viewModelScope.launch {
+            _state.update { it.copy(isLoading = true) }
             repository.getMovieDetails(movieId)
                 .catch { e ->
                     _state.update {
@@ -60,8 +60,8 @@ class MovieDetailsViewModel @Inject constructor(
                     }
                 }
                 .collect { details ->
-                    val hasLocalData = details != null  // TODO - check this code - "details != null"
-                    Log.d("asdf", "VM hasLocalData = $hasLocalData")
+                    val hasLocalData =
+                        details != null  // TODO - check this code - "details != null"
                     _state.update {
                         it.copy(
                             movie = details,
