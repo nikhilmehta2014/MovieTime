@@ -53,106 +53,121 @@ fun MovieListItem(
             .fillMaxWidth()
             .height(120.dp)
     ) {
+        val cardGradient = Brush.verticalGradient(
+            colors = listOf(
+                Color(0xFF2C2C2C), // Top - lighter gray
+                Color(0xFF1F1F1F), // Middle - base dark gray
+                Color(0xFF1A1A1A)  // Bottom - slightly darker
+            )
+        )
         Card(
             modifier = Modifier
                 .fillMaxSize()
                 .then(if (!isLoading) Modifier.clickable { onClick() } else Modifier),
             shape = RoundedCornerShape(12.dp),
             elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-            colors = CardDefaults.cardColors(containerColor = Color(0xFFF5F5F5))
+            colors = CardDefaults.cardColors(containerColor = Color.Transparent)
         ) {
-            Row(
-                modifier = Modifier.padding(12.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                if (isLoading) {
-                    Spacer(
-                        modifier = Modifier
-                            .fillMaxHeight()
-                            .aspectRatio(2f / 3f)
-                            .clip(RoundedCornerShape(8.dp))
-                            .background(Brush.shimmer())
-                    )
-                } else {
-                    AsyncImage(
-                        model = movie.posterUrl.takeIf { it.isNotEmpty() }
-                            ?.let { "https://image.tmdb.org/t/p/w185${movie.posterUrl}" },
-                        contentDescription = movie.title,
-                        contentScale = ContentScale.Crop,
-                        error = painterResource(R.drawable.error_poster),
-                        fallback = painterResource(R.drawable.fallback_poster),
-                        modifier = Modifier
-                            .fillMaxHeight()
-                            .aspectRatio(2f / 3f)
-                            .clip(RoundedCornerShape(8.dp))
-                    )
-                }
-
-                Spacer(modifier = Modifier.width(12.dp))
-
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .fillMaxHeight(),
-                    verticalArrangement = Arrangement.Top
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(cardGradient)
+                    .padding(12.dp)
+            ){
+                Row(
+                    modifier = Modifier.padding(12.dp),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     if (isLoading) {
                         Spacer(
                             modifier = Modifier
-                                .height(24.dp)
-                                .fillMaxWidth(0.7f)
-                                .clip(RoundedCornerShape(4.dp))
-                                .background(Brush.shimmer())
-                        )
-
-                        Spacer(modifier = Modifier.height(12.dp))
-
-                        Spacer(
-                            modifier = Modifier
-                                .height(16.dp)
-                                .fillMaxWidth(0.4f)
-                                .clip(RoundedCornerShape(4.dp))
+                                .fillMaxHeight()
+                                .aspectRatio(2f / 3f)
+                                .clip(RoundedCornerShape(8.dp))
                                 .background(Brush.shimmer())
                         )
                     } else {
-                        Text(
-                            text = movie.title,
-                            style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
+                        AsyncImage(
+                            model = movie.posterUrl.takeIf { it.isNotEmpty() }
+                                ?.let { "https://image.tmdb.org/t/p/w185${movie.posterUrl}" },
+                            contentDescription = movie.title,
+                            contentScale = ContentScale.Crop,
+                            error = painterResource(R.drawable.error_poster),
+                            fallback = painterResource(R.drawable.fallback_poster),
                             modifier = Modifier
-                                .padding(top = 8.dp, end = 48.dp)
+                                .fillMaxHeight()
+                                .aspectRatio(2f / 3f)
+                                .clip(RoundedCornerShape(8.dp))
                         )
+                    }
 
-                        Spacer(modifier = Modifier.height(6.dp))
+                    Spacer(modifier = Modifier.width(12.dp))
 
-                        val hasYear = movie.releaseYear.isNotBlank()
-                        val hasVotes = movie.rating > 0
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .fillMaxHeight(),
+                        verticalArrangement = Arrangement.Top
+                    ) {
+                        if (isLoading) {
+                            Spacer(
+                                modifier = Modifier
+                                    .height(24.dp)
+                                    .fillMaxWidth(0.7f)
+                                    .clip(RoundedCornerShape(4.dp))
+                                    .background(Brush.shimmer())
+                            )
 
-                        if (hasYear || hasVotes) {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                if (hasYear) {
-                                    Text(
-                                        text = movie.releaseYear,
-                                        style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
-                                        color = Color.Gray
-                                    )
-                                }
+                            Spacer(modifier = Modifier.height(12.dp))
 
-                                if (hasYear && hasVotes) {
-                                    Text(
-                                        text = " \u2022 ",
-                                        style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
-                                        color = Color.Gray
-                                    )
-                                }
+                            Spacer(
+                                modifier = Modifier
+                                    .height(16.dp)
+                                    .fillMaxWidth(0.4f)
+                                    .clip(RoundedCornerShape(4.dp))
+                                    .background(Brush.shimmer())
+                            )
+                        } else {
+                            Text(
+                                text = movie.title,
+                                style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+                                color = Color.White,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                modifier = Modifier
+                                    .padding(top = 8.dp, end = 48.dp)
+                            )
 
-                                if (hasVotes) {
-                                    Text(
-                                        text = "${movie.rating}",
-                                        style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
-                                        color = Color.Gray
-                                    )
+                            Spacer(modifier = Modifier.height(6.dp))
+
+                            val hasYear = movie.releaseYear.isNotBlank()
+                            val hasVotes = movie.rating > 0
+
+                            if (hasYear || hasVotes) {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    if (hasYear) {
+                                        Text(
+                                            text = movie.releaseYear,
+                                            style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
+                                            color = Color.White
+                                        )
+                                    }
+
+                                    if (hasYear && hasVotes) {
+                                        Text(
+                                            text = " \u2022 ",
+                                            style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
+                                            color = Color.White
+                                        )
+                                    }
+
+                                    if (hasVotes) {
+                                        Text(
+                                            text = "${movie.rating}",
+                                            style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
+                                            color = Color.White
+                                        )
+                                    }
                                 }
                             }
                         }
@@ -171,7 +186,7 @@ fun MovieListItem(
                 Icon(
                     imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
                     contentDescription = if (isFavorite) "Unfavorite" else "Favorite",
-                    tint = if (isFavorite) Color.Red else Color.Gray
+                    tint = if (isFavorite) Color(0xFFFF4C4C) else Color(0xFFB0B0B0)
                 )
             }
         }

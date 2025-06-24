@@ -29,6 +29,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -38,6 +39,7 @@ import com.nikhil.movietime.core.domain.model.Movie
 import com.nikhil.movietime.ui.components.ErrorCard
 import com.nikhil.movietime.ui.components.HeadingTitle
 import com.nikhil.movietime.ui.components.MovieListItem
+import com.nikhil.movietime.ui.components.shimmer
 import com.nikhil.movietime.ui.navigation.Routes
 import com.nikhil.movietime.ui.search.data.mapper.toMovie
 
@@ -59,7 +61,7 @@ fun SearchScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.White)
+                .background(Color(0xFF121212))
         ) {
             // Search Bar Container
             Card(
@@ -113,8 +115,16 @@ fun SearchScreen(
             }
 
             // Title
-            if (!state.isLoading && state.movies.isNotEmpty()) {
-                HeadingTitle(title = "Movies", titleColor = Color.Black)
+            if (state.isLoading) {
+                Spacer(
+                    modifier = Modifier
+                        .padding(top = 8.dp)
+                        .height(16.dp)
+                        .fillMaxWidth(0.4f)
+                        .background(Brush.shimmer())
+                )
+            } else if (state.movies.isNotEmpty()) {
+                HeadingTitle(title = "Movies")
             }
 
             // Movies List

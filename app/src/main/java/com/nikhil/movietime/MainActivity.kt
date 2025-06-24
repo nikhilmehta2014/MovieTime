@@ -47,7 +47,7 @@ fun MainScreen(navController: NavHostController) {
     val showBottomBar = currentRoute in bottomNavItems.map { it.route }
 
     Scaffold(
-        containerColor = Color(0xFF0F111D),
+        containerColor = Color(0xFF121212),
         contentWindowInsets = ScaffoldDefaults.contentWindowInsets,
         bottomBar = {
             if (showBottomBar) {
