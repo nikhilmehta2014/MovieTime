@@ -16,9 +16,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.nikhil.movietime.R
 
 @Composable
 fun LabelCard(
@@ -63,8 +65,8 @@ fun LabelCardPreview() {
             .padding(16.dp),
         verticalArrangement = Arrangement.Center
     ) {
-        LabelCard(text = "Now Playing")
+        LabelCard(text = stringResource(R.string.now_playing))
         Spacer(modifier = Modifier.height(8.dp))
-        LabelCard(text = "Trending", cornerRadius = 16.dp)
+        LabelCard(text = stringResource(R.string.trending), cornerRadius = 16.dp)
     }
 }

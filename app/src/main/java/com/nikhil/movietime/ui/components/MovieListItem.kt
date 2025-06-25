@@ -32,6 +32,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -72,7 +73,7 @@ fun MovieListItem(
                     .fillMaxSize()
                     .background(cardGradient)
                     .padding(12.dp)
-            ){
+            ) {
                 Row(
                     modifier = Modifier.padding(12.dp),
                     verticalAlignment = Alignment.CenterVertically
@@ -147,7 +148,9 @@ fun MovieListItem(
                                     if (hasYear) {
                                         Text(
                                             text = movie.releaseYear,
-                                            style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
+                                            style = MaterialTheme.typography.bodyLarge.copy(
+                                                fontWeight = FontWeight.Bold
+                                            ),
                                             color = Color.White
                                         )
                                     }
@@ -155,7 +158,9 @@ fun MovieListItem(
                                     if (hasYear && hasVotes) {
                                         Text(
                                             text = " \u2022 ",
-                                            style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
+                                            style = MaterialTheme.typography.bodyLarge.copy(
+                                                fontWeight = FontWeight.Bold
+                                            ),
                                             color = Color.White
                                         )
                                     }
@@ -163,7 +168,9 @@ fun MovieListItem(
                                     if (hasVotes) {
                                         Text(
                                             text = "${movie.rating}",
-                                            style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
+                                            style = MaterialTheme.typography.bodyLarge.copy(
+                                                fontWeight = FontWeight.Bold
+                                            ),
                                             color = Color.White
                                         )
                                     }
@@ -184,7 +191,10 @@ fun MovieListItem(
             ) {
                 Icon(
                     imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                    contentDescription = if (isFavorite) "Unfavorite" else "Favorite",
+                    contentDescription = if (isFavorite)
+                        stringResource(R.string.unfavorite)
+                    else
+                        stringResource(R.string.favorite),
                     tint = if (isFavorite) Color(0xFFFF4C4C) else Color(0xFFB0B0B0)
                 )
             }

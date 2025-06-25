@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.nikhil.movietime.R
@@ -31,7 +32,7 @@ fun FavoriteScreen(
             .fillMaxSize()
             .padding(horizontal = 16.dp, vertical = 24.dp)
     ) {
-        HeadingTitle(title = "Favorite Movies")
+        HeadingTitle(title = stringResource(R.string.favorite_movies))
         if (favoriteMovies.isEmpty()) {
             Box(
                 modifier = Modifier.fillMaxSize(),
@@ -39,8 +40,8 @@ fun FavoriteScreen(
             ) {
                 ErrorCard(
                     imageId = R.drawable.no_fav_movie,
-                    imageContentDescription = "No movies marked as favorite",
-                    text = "No movies marked as favorite"
+                    imageContentDescription = stringResource(R.string.error_no_movie_marked_as_favorite),
+                    text = stringResource(R.string.error_no_movie_marked_as_favorite),
                 )
             }
         } else {

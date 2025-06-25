@@ -41,9 +41,9 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainScreen(navController: NavHostController) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route ?: bottomNavItems[0].route
+    val currentRoute = navBackStackEntry?.destination?.route ?: bottomNavItems()[0].route
 
-    val showBottomBar = currentRoute in bottomNavItems.map { it.route }
+    val showBottomBar = currentRoute in bottomNavItems().map { it.route }
 
     Scaffold(
         containerColor = Color(0xFF121212),
@@ -52,7 +52,7 @@ fun MainScreen(navController: NavHostController) {
             if (showBottomBar) {
                 BottomNavigationBar(
                     selectedRoute = currentRoute,
-                    items = bottomNavItems,
+                    items = bottomNavItems(),
                     onItemSelected = { item ->
                         if (currentRoute != item.route) {
                             navController.navigate(item.route) {

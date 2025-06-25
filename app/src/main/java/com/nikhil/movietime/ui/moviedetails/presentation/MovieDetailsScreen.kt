@@ -39,6 +39,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
@@ -75,8 +76,8 @@ fun MovieDetailsScreen(
         if (!state.isConnected && !state.hasLocalData && !state.isLoading) {
             ErrorCard(
                 imageId = R.drawable.cloud_off,
-                imageContentDescription = "No Internet",
-                text = "No Internet Connection"
+                imageContentDescription = stringResource(R.string.desc_no_internet),
+                text = stringResource(R.string.error_no_internet_connection)
             )
         } else {
             Box(
@@ -274,7 +275,7 @@ fun MenuIcons(
         topPadding = 12.dp,
         onClick = { navController.popBackStack() },
         image = Icons.Default.ArrowBack,
-        contentDescription = "Back"
+        contentDescription = stringResource(R.string.desc_back)
     )
 
     if (state.movie != null) {
@@ -287,17 +288,17 @@ fun MenuIcons(
                     val shareUri = "https://movietime.fake/movie/$movieId"
                     val shareIntent = Intent(Intent.ACTION_SEND).apply {
                         type = "text/plain"
-                        putExtra(Intent.EXTRA_SUBJECT, "Check out this movie: ${movie.title}")
+                        putExtra(Intent.EXTRA_SUBJECT, "${context.getString(R.string.check_out_this_movie)}${movie.title}")
                         putExtra(
                             Intent.EXTRA_TEXT,
-                            "Watch this movie on MovieTime:\n$shareUri"
+                            "${context.getString(R.string.watch_this_movie)}\n$shareUri"
                         )
                     }
-                    context.startActivity(Intent.createChooser(shareIntent, "Share via"))
+                    context.startActivity(Intent.createChooser(shareIntent, context.getString(R.string.share_via)))
                 }
             },
             image = Icons.Default.Share,
-            contentDescription = "Share"
+            contentDescription = stringResource(R.string.desc_share)
         )
         var isFavorite = false
         MenuIconButton(
@@ -314,7 +315,7 @@ fun MenuIcons(
                 isFavorite = false
                 Icons.Default.FavoriteBorder
             },
-            contentDescription = "Bookmark",
+            contentDescription = stringResource(R.string.desc_bookmark),
             isFavorite = isFavorite
         )
     }

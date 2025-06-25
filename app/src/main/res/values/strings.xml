@@ -1,3 +1,27 @@
 <resources>
     <string name="app_name">MovieTime</string>
+    <string name="movies">Movies</string>
+    <string name="trending">Trending</string>
+    <string name="now_playing">Now Playing</string>
+    <string name="favorite_movies">Favorite Movies</string>
+    <string name="share_via">Share via</string>
+    <string name="find_movies">Find movies</string>
+    <string name="favorite">Favorite</string>
+    <string name="unfavorite">Unfavorite</string>
+    <string name="home">Home</string>
+    <string name="search">Search</string>
+    <string name="check_out_this_movie">Check out this movie: </string>
+    <string name="watch_this_movie">Watch this movie on MovieTime:</string>
+
+    <string name="error_no_internet_connection">No Internet Connection</string>
+    <string name="error_search_for_movies">Search for movies</string>
+    <string name="error_no_movie_found">No movie found</string>
+    <string name="error_no_movie_marked_as_favorite">No movies marked as favorite</string>
+    <string name="error_something_went_wrong">Something went wrong</string>
+    <string name="error_type_3_characters">Type at least 3 characters</string>
+
+    <string name="desc_no_internet">No Internet</string>
+    <string name="desc_back">Back</string>
+    <string name="desc_share">Share</string>
+    <string name="desc_bookmark">Bookmark</string>
 </resources>

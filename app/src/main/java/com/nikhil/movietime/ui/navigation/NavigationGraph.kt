@@ -40,7 +40,7 @@ fun NavigationGraph(navController: NavHostController) {
         composable(route = Routes.SEARCH) {
             SearchScreen(navController = navController)
         }
-        composable("favorite") {
+        composable(route = Routes.FAVORITE) {
             FavoriteScreen(
                 onMovieClick = { movieId ->
                     navController.navigate("${Routes.MOVIE_DETAILS}/${movieId}")

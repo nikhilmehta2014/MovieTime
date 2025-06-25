@@ -11,6 +11,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.nikhil.movietime.R
@@ -29,8 +30,8 @@ fun HomeScreen(
     if (!state.isConnected && !state.hasLocalData) {
         ErrorCard(
             imageId = R.drawable.cloud_off,
-            imageContentDescription = "No Internet",
-            text = "No Internet Connection"
+            imageContentDescription = stringResource(R.string.desc_no_internet),
+            text = stringResource(R.string.error_no_internet_connection)
         )
         return
     }
@@ -47,8 +48,8 @@ fun HomeScreen(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
-        renderRow("Trending", state.trending)
-        renderRow("Now Playing", state.nowPlaying)
+        renderRow(stringResource(R.string.trending), state.trending)
+        renderRow(stringResource(R.string.now_playing), state.nowPlaying)
     }
 }
 

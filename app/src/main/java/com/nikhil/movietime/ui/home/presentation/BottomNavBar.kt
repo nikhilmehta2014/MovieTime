@@ -31,8 +31,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.nikhil.movietime.R
+import com.nikhil.movietime.ui.navigation.Routes
 
 @Composable
 fun BottomNavigationBar(
@@ -89,26 +92,26 @@ fun BottomNavigationBar(
 fun BottomNavigationBarPreview() {
     val items = listOf(
         BottomNavItem(
-            route = "home",
+            route = Routes.HOME,
             selectedIcon = Icons.Filled.Home,
             unselectedIcon = Icons.Outlined.Home,
-            label = "Home"
+            label = stringResource(R.string.home)
         ),
         BottomNavItem(
-            route = "search",
+            route = Routes.SEARCH,
             selectedIcon = Icons.Filled.Search,
             unselectedIcon = Icons.Outlined.Search,
-            label = "Search"
+            label = stringResource(R.string.search)
         ),
         BottomNavItem(
-            route = "saved",
+            route = Routes.FAVORITE,
             selectedIcon = Icons.Filled.Favorite,
             unselectedIcon = Icons.Outlined.FavoriteBorder,
-            label = "Saved"
+            label = stringResource(R.string.favorite)
         )
     )
 
-    var selectedRoute by remember { mutableStateOf("home") }
+    var selectedRoute by remember { mutableStateOf(Routes.HOME) }
 
     BottomNavigationBar(
         selectedRoute = selectedRoute,

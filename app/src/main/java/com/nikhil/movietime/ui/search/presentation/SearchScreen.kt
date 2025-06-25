@@ -32,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -56,8 +57,8 @@ fun SearchScreen(
     if (!state.isConnected) {
         ErrorCard(
             imageId = R.drawable.cloud_off,
-            imageContentDescription = "No Internet",
-            text = "No Internet Connection"
+            imageContentDescription = stringResource(R.string.desc_no_internet),
+            text = stringResource(R.string.error_no_internet_connection)
         )
     } else {
         Column(
@@ -113,7 +114,7 @@ fun SearchBarContainer(state: SearchUiState, viewModel: SearchViewModel) {
             ) {
                 Icon(
                     imageVector = Icons.Default.Search,
-                    contentDescription = "Search",
+                    contentDescription = stringResource(R.string.search),
                     tint = Color.White
                 )
                 Spacer(modifier = Modifier.width(8.dp))
@@ -122,7 +123,7 @@ fun SearchBarContainer(state: SearchUiState, viewModel: SearchViewModel) {
                     onValueChange = { viewModel.onSearchQueryChanged(it) },
                     placeholder = {
                         Text(
-                            text = "Find movies",
+                            text = stringResource(R.string.find_movies),
                             color = Color.White.copy(alpha = 0.6f)
                         )
                     },
@@ -157,7 +158,7 @@ fun TitleRow(state: SearchUiState) {
                 .background(Brush.shimmer())
         )
     } else if (state.movies.isNotEmpty()) {
-        HeadingTitle(title = "Movies")
+        HeadingTitle(title = stringResource(R.string.movies))
     }
 }
 
@@ -206,8 +207,8 @@ fun MoviesList(
                 state.query.isEmpty() -> {
                     ErrorCard(
                         imageId = R.drawable.movie_search,
-                        imageContentDescription = "Search for movies",
-                        text = "Search for movies",
+                        imageContentDescription = stringResource(R.string.error_search_for_movies),
+                        text = stringResource(R.string.error_search_for_movies),
                     )
                 }
 
@@ -215,8 +216,8 @@ fun MoviesList(
                     // Show "No results found" only when search is valid but result is empty
                     ErrorCard(
                         imageId = R.drawable.no_movie_found,
-                        imageContentDescription = "No movie found",
-                        text = "No Movie Found",
+                        imageContentDescription = stringResource(R.string.error_no_movie_found),
+                        text = stringResource(R.string.error_no_movie_found),
                     )
                 }
             }

@@ -2,9 +2,11 @@ package com.nikhil.movietime.ui.search.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.nikhil.movietime.R
 import com.nikhil.movietime.core.data.repository.FavoriteRepository
 import com.nikhil.movietime.core.domain.model.Movie
 import com.nikhil.movietime.core.network.NetworkMonitor
+import com.nikhil.movietime.core.util.StringProvider
 import com.nikhil.movietime.ui.search.domain.repository.SearchRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,6 +24,7 @@ class SearchViewModel @Inject constructor(
     private val favoriteRepository: FavoriteRepository,
     private val repository: SearchRepository,
     networkMonitor: NetworkMonitor,
+    private val stringProvider: StringProvider
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(SearchUiState())
@@ -58,7 +61,11 @@ class SearchViewModel @Inject constructor(
                             it.copy(
                                 movies = emptyList(),
                                 isLoading = false,
-                                errorMessage = if (query.isNotBlank()) "Type at least 3 characters" else null
+                                errorMessage =
+                                    if (query.isNotBlank())
+                                        stringProvider.getString(R.string.error_type_3_characters)
+                                    else
+                                        null
                             )
                         }
                         return@collectLatest
@@ -76,7 +83,8 @@ class SearchViewModel @Inject constructor(
                             it.copy(
                                 movies = emptyList(),
                                 isLoading = false,
-                                errorMessage = e.message ?: "Something went wrong"
+                                errorMessage = e.message
+                                    ?: stringProvider.getString(R.string.error_something_went_wrong)
                             )
                         }
                     }
