@@ -8,12 +8,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.nikhil.movietime.R
 import com.nikhil.movietime.ui.components.ErrorCard
 import com.nikhil.movietime.ui.components.HeadingTitle
@@ -25,7 +25,7 @@ fun FavoriteScreen(
     modifier: Modifier = Modifier,
     viewModel: FavoriteViewModel = hiltViewModel(),
 ) {
-    val favoriteMovies = viewModel.favoriteMovies.collectAsState().value
+    val favoriteMovies = viewModel.favoriteMovies.collectAsStateWithLifecycle().value
 
     Column(
         modifier = modifier
